@@ -2,7 +2,6 @@
 Parser= require './parser'
 
 express= require 'express'
-mkdirp= require 'mkdirp'
 request= require 'request'
 
 path= require 'path'
