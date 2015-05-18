@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+var Soysauce;
+if(require('module')._extensions['.coffee']==null){
+  require('coffee-script/register');
+  Soysauce= require('./src');
+  // Soysauce= require('./lib');
+}
+else{
+  Soysauce= require('./src');
+}
+
+if(module.parent===null){
+  new Soysauce().cli(process.argv);
+}
+
+module.exports= Soysauce;

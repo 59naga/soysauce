@@ -1,0 +1,38 @@
+{
+  "name": "soysauce",
+  "main": "soysauce",
+  "main": "soysauce",
+  "description": "Create SauceLabs browser matrix widget",
+  "version": "0.0.0-beta.0",
+
+  "scripts": {
+    "postinstall": "coffee -o lib -c src",
+
+    "start": "jasminetea test --file '*.coffee' --verbose --watch --recursive --timeout 5000",
+    "test": "jasminetea test --file '*.coffee' --verbose --recursive --cover --lint --report --timeout 5000"
+  },
+  
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "coffee-script": "^1.9.2",
+    "commander": "^2.8.1",
+    "express": "^4.12.3",
+    "js-beautify": "^1.5.5",
+    "mkdirp": "^0.5.1",
+    "request": "^2.55.0"
+  },
+  "devDependencies": {
+    "jasminetea": "^0.1.30-rc.3"
+  },
+
+  "author": "59naga <i59naga@icloud.com> (http://berabou.me)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/59naga/soysauce.git"
+  },
+  "bugs": {
+    "url": "https://github.com/59naga/soysauce/issues"
+  },
+  "homepage": "https://github.com/59naga/soysauce#readme"
+}
