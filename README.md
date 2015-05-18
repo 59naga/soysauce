@@ -22,6 +22,9 @@ $ npm install soysauce --global
 #    -s, --stdio          Stdin-out widget SVG
 ```
 
+### Use zuul
+[See example](https://github.com/59798/zuul-example)
+
 ### Use Stdin-out
 Create `widget.svg` by Pass [SauceLabs-job-statuses][1] to CLI
 
