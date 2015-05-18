@@ -26,6 +26,8 @@ describe 'SauceLabs browser matrix widget',->
     svg= soysauce.render []
     $= cheerio.load svg
 
+    # fs.writeFileSync fixturePath.replace(/.json$/,'.svg'),svg
+
     expect($('text').text()).toBe 'Build unknown'
 
   it 'Create Standalone SVG',->
@@ -35,6 +37,8 @@ describe 'SauceLabs browser matrix widget',->
     $= cheerio.load svg
     builds= $ 'g.li'
     hrefs= $('image').map(->$(this).attr 'xlink:href').get().toString()
+
+    # fs.writeFileSync fixturePath.replace(/.json$/,'.svg'),svg
 
     expect(builds.length).toBe fixture.length
     expect(hrefs).not.toMatch 'http:\/\/'

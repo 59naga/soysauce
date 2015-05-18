@@ -49,10 +49,10 @@ class Widget
     if @count is 0
       text= @document '<text/>'
       text.attr
-        x: 3
+        x: 4
         y: 11
-        fill: '#dad2da'
-        'font-size': 10
+        fill: '#dadada'
+        'font-size': 7
       text.text 'Build unknown'
       @svg.append text
   
