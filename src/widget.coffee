@@ -3,7 +3,8 @@ cheerio= require 'cheerio'
 htmlBeautify= (require 'js-beautify').html
 
 # Private
-marginTotal= (length,pixel=2)->
+padding= 5
+paddingTotal= (length,pixel=1)->
   value= 0
   value+= pixel for i in [0...length]
   value
@@ -13,13 +14,13 @@ class Widget
   constructor: (@columns,@rows)->
     @document= cheerio.load '<svg/>',xmlMode:yes
 
-    @columnSize= 80
+    @columnSize= 60
     @rowSize= 16
-    @width= @columnSize* @columns+ marginTotal(@columns)
-    @height= @rowSize* @rows+ @rowSize+ marginTotal(@rows)
+    @width= @columnSize* @columns+ paddingTotal(@columns,padding)+padding
+    @height= @rowSize* @rows+ @rowSize+ paddingTotal(@rows)
 
     @count= @columns*@rows
-    background= 'black'
+    background= '#232D34'
     if @count is 0
       background= 'gray'
 
@@ -50,8 +51,8 @@ class Widget
       text.attr
         x: 3
         y: 11
-        fill: '#dadada'
-        'font-size': 8
+        fill: '#dad2da'
+        'font-size': 10
       text.text 'Build unknown'
       @svg.append text
   
@@ -62,7 +63,7 @@ class Widget
 
     width= @columnSize
     height= @rowSize
-    dx= width*i + i*2
+    dx= padding+ width*i + i*padding
     dy= 0
 
     rect= @document '<rect/>'
@@ -86,9 +87,9 @@ class Widget
 
     text= @document '<text/>'
     text.attr
-      x: 16+ dx
-      y: 11+ dy
-      'font-size': 8
+      x: 18+ dx
+      y: 12+ dy
+      'font-size': 10
       fill: 'white'
     text.text browser.name
     g.append text
@@ -109,7 +110,7 @@ class Widget
 
     width= @columnSize
     height= @rowSize
-    dx= 1+ width* i + i*2
+    dx= padding+ width* i + i*padding
     dy= height+ height*j + j
 
     rect= @document '<rect/>'
@@ -127,23 +128,23 @@ class Widget
     text.text build.version
     text.attr
       x:  4+ dx
-      y: 11+ dy
-      'font-size': 8
+      y: 12+ dy
+      'font-size': 10
     g.append text
 
     image= @document '<image/>'
     image.attr
-      x: 20+ dx
-      y:  0+ dy
-      width: height
-      height: height
+      x: 22+ dx
+      y:  1+ dy
+      width: height-2
+      height: height-2
       'xlink:href': build.osIcon
     g.append image
 
     text= @document '<text/>'
     text.text build.osVersion
     text.attr
-      x: 38+ dx
+      x: 39+ dx
       y: 10+ dy
       'font-size': 6
       fill: 'white'

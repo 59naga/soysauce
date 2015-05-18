@@ -26,11 +26,8 @@ describe 'Publish widget middleware',->
     
     server= app.listen PORT,->
       done()
-  afterAll (done)->
+  afterAll ->
     server.close()
-
-    exec 'rm -rf '+serverDir,->
-      done()
 
   it 'Get latest build widget',(done)->
     options= {}

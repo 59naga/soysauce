@@ -18,7 +18,6 @@ travis=
 class Publisher extends Parser
   constructor: (@widgetDir)->
     @widgetDir?= path.join process.cwd(),'widgets'
-    mkdirp.sync @widgetDir
 
     @middleware= express.Router()
     @middleware.get '/:user/:repo.svg',(req,res)=>
