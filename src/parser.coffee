@@ -8,7 +8,7 @@ fs= require 'fs'
 path= require 'path'
 
 # Private
-travisLogUrl= 'https://s3.amazonaws.com/archive.travis-ci.org/jobs/'
+travisLogUrl= 'https://api.travis-ci.org/jobs/'
 saucelabsNames= [
   'ipad'
   'firefox'
@@ -24,7 +24,7 @@ class Parser
   iconPath: path.resolve __dirname,'..','icons'
 
   getKey: (id='UNKNOWN')->
-    '\n=====TRAVIS_JOB_'+id+'_RESULT=====\n'
+    '=====TRAVIS_JOB_'+id+'_RESULT====='
 
   encrypt: (statuses,id)->
     key= @getKey id

@@ -12,7 +12,6 @@ exec= (require 'child_process').exec
 # Environment
 PORT= 59798
 URL= 'http://localhost:'+PORT+'/'
-TRAVIS_JOB_ID= 62892354
 widgetUrl= '59naga/zuul-example.svg'
 clickedUrl= '59naga/zuul-example'
 
