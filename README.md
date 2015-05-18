@@ -2,6 +2,8 @@
 
 > Create SauceLabs browser matrix widget for [Zuul](https://github.com/59naga/zuul)
 
+[![Sauce Test Status][sauce-image]][sauce]
+
 ## Installation
 ```bash
 $ npm install soysauce --global
@@ -78,6 +80,8 @@ License
 
 [License]: http://59naga.mit-license.org/
 
+[sauce-image]: http://soysauce.berabou.me/59798/zuul-example.svg
+[sauce]: https://saucelabs.com/u/59798
 [npm-image]:https://img.shields.io/npm/v/soysauce.svg?style=flat-square
 [npm]: https://npmjs.org/package/soysauce
 [travis-image]: http://img.shields.io/travis/59naga/soysauce.svg?style=flat-square
