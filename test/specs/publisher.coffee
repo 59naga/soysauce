@@ -13,8 +13,8 @@ exec= (require 'child_process').exec
 PORT= 59798
 URL= 'http://localhost:'+PORT+'/'
 TRAVIS_JOB_ID= 62892354
-widgetUrl= '59naga/zuul-reporter.svg'
-clickedUrl= '59naga/zuul-reporter'
+widgetUrl= '59naga/zuul-example.svg'
+clickedUrl= '59naga/zuul-example'
 
 # Specs
 describe 'Publish widget middleware',->

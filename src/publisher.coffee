@@ -26,10 +26,10 @@ class Publisher extends Parser
 
       uri= travis.api.repos+ slug+ '/branches'
       request uri,(error,response)=>
-        throw error if error?
+        return res.status(500).end(error.message) if error
 
         repo= JSON.parse response.body
-        latestJobId= repo.branches[0].job_ids[0]
+        latestJobId= repo.branches[0]?.job_ids[0]
         @fetchLog latestJobId,(error,log)=>
           return res.status(500).end(error.message) if error
 

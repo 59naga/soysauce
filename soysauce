@@ -2,9 +2,7 @@
 
 var Soysauce;
 if(require('module')._extensions['.coffee']==null){
-  require('coffee-script/register');
-  Soysauce= require('./src');
-  // Soysauce= require('./lib');
+  Soysauce= require('./lib');
 }
 else{
   Soysauce= require('./src');
