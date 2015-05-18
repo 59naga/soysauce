@@ -78,9 +78,9 @@ License
 
 [License]: http://59naga.mit-license.org/
 
-[npm-image]:https://img.shields.io/npm/v/zuul-reporter.svg?style=flat-square
-[npm]: https://npmjs.org/package/zuul-reporter
-[travis-image]: http://img.shields.io/travis/59naga/zuul-reporter.svg?style=flat-square
-[travis]: https://travis-ci.org/59naga/zuul-reporter
-[coveralls-image]: http://img.shields.io/coveralls/59naga/zuul-reporter.svg?style=flat-square
-[coveralls]: https://coveralls.io/r/59naga/zuul-reporter?branch=master
+[npm-image]:https://img.shields.io/npm/v/soysauce.svg?style=flat-square
+[npm]: https://npmjs.org/package/soysauce
+[travis-image]: http://img.shields.io/travis/59naga/soysauce.svg?style=flat-square
+[travis]: https://travis-ci.org/59naga/soysauce
+[coveralls-image]: http://img.shields.io/coveralls/59naga/soysauce.svg?style=flat-square
+[coveralls]: https://coveralls.io/r/59naga/soysauce?branch=master
