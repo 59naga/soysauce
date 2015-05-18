@@ -35,6 +35,7 @@ class Publisher extends Parser
 
           statuses= @parse log,latestJobId
           svg= @render statuses,standalone:yes
+          res.set 'Content-Type','image/svg+xml'
           res.end svg
       
     @middleware.get '/:user/:repo',(req,res)=>

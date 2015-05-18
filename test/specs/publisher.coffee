@@ -41,6 +41,7 @@ describe 'Publish widget middleware',->
 
       expect(error).toBe null
       expect(response.statusCode).toBe 200
+      expect(response.headers['content-type']).toBe 'image/svg+xml'
       expect($('text').text()).toBe 'Build unknown'
       done()
 
