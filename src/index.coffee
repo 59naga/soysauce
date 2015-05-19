@@ -23,16 +23,16 @@ class Soysauce extends Parser
       .description 'Output widget.json by SauceLabs Job API'
       .action (username,sauceJobIds)=>
         @report username,sauceJobIds,process.env.TRAVIS_JOB_ID
-        .then (data)->
-          console.log data
+        .then (report)->
+          console.log report
 
     cli
-      .command 'fetch [log_id]'
-      .description 'Output widget.svg via Travis-CI log.txt'
+      .command 'widget [log_id]'
+      .description 'Output widget.svg by Travis-CI log.txt'
       .action =>
-        @fetch arguments...
-        .then (svg)->
-          console.log svg
+        @widget arguments...
+        .then (widgetSvg)->
+          console.log widgetSvg
 
     cli.parse argv
 
@@ -44,7 +44,7 @@ class Soysauce extends Parser
 
         return cli.help() if cli.args.length is 0
         return if 'report' in cli.rawArgs
-        return if 'fetch' in cli.rawArgs
+        return if 'widget' in cli.rawArgs
 
         dataPath= path.resolve process.cwd(),cli.args[0]
         try
@@ -91,9 +91,10 @@ class Soysauce extends Parser
 
     Promise.all promises
     .then (statuses)=>
+      
       @stringify statuses,travisJobId
 
-  fetch: (travisJobId)->
+  widget: (travisJobId)->
     new Promise (resolve,reject)=>
       super travisJobId,(error,raw)=>
         return reject error if error?

@@ -14,6 +14,7 @@ travisLogUrl= 'https://api.travis-ci.org/jobs/'
 
 class Parser
   constructor: (@options={})->
+    @options.fold?= yes
     @options.standalone?= yes
 
   fetchBuild: (username,sessionId,callback)->
@@ -32,12 +33,12 @@ class Parser
       widgetData= JSON.stringify statuses,null,2
 
     data= ''
-    data+= travisFold.start 'soysauce' if id
+    data+= travisFold.start 'soysauce' if @fold
     data+= widgetData
-    data+= travisFold.end 'soysauce' if id
+    data+= travisFold.end 'soysauce' if @fold
     data
 
-  fetch: (id,callback)->
+  widget: (id,callback)->
     request travisLogUrl+id+'/log.txt',(error,response)->
       callback error,response.body
 

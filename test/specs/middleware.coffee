@@ -1,5 +1,7 @@
 # Dependencies
 soysauce= require '../../'
+soysauce.options.fold= no
+soysauce.options.standalone= no
 
 express= require 'express'
 request= require 'request'
@@ -11,12 +13,13 @@ exec= (require 'child_process').exec
 # Environment
 TRAVIS_JOB_ID= 62974455
 PORT= 59798
+
 URL= 'http://localhost:'+PORT+'/'
 widgetUrl= '59naga/zuul-example.svg'
 clickedUrl= '59naga/zuul-example'
 
 # Specs
-describe 'Travis log.txt parser middleware',->
+describe 'Middleware: Travis log.txt parser',->
   serverDir= path.join process.cwd(),'widgets'
   server= null
 

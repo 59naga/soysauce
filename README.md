@@ -10,7 +10,7 @@ $ npm install soysauce --global
 $ soysauce -V
 # 0.0.2-beta.1
 
-$ soysauce fetch 62974455
+$ soysauce widget 62974455
 # <svg version="1.1" ...>
 #   <rect x="0" y="0" width="460" height="16" fill="#232D34" />
 #   <g class="h1 firefox">...</g>
@@ -39,7 +39,7 @@ $ soysauce --help
 #  Commands:
 #
 #    report <username> [job_id...]  Output widget.json
-#    fetch <log_id>                 Output widget.svg via Travis-CI log.txt
+#    widget <log_id>                Output widget.svg via Travis-CI log.txt
 #
 #  Options:
 #

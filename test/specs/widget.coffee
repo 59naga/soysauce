@@ -1,5 +1,7 @@
 # Dependencies
 soysauce= require '../../'
+soysauce.options.fold= no
+soysauce.options.standalone= no
 
 cheerio= require 'cheerio'
 
@@ -10,7 +12,7 @@ fs= require 'fs'
 fixturePath= path.join __dirname,'..','fixture.json'
 
 # Spec
-describe 'Browser matrix widget',->
+describe 'Widget: Browser matrix widget',->
   it 'Create',->
     fixture= require fixturePath
 

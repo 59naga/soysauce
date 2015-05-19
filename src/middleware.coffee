@@ -18,7 +18,7 @@ class Middleware extends Parser
 
     @middleware= express.Router()
     @middleware.get '/:id(\\d+)',(req,res)=>
-      @fetch req.params.id,(error,log)=>
+      @widget req.params.id,(error,log)=>
         statuses= @parse log,req.params.id
         svg= @render statuses
         res.set 'Content-Type','image/svg+xml'
@@ -33,7 +33,7 @@ class Middleware extends Parser
 
         repo= JSON.parse response.body
         latestJobId= repo.branches[0]?.job_ids[0]
-        @fetch latestJobId,(error,log)=>
+        @widget latestJobId,(error,log)=>
           return res.status(500).end(error.message) if error
 
           statuses= @parse log,latestJobId

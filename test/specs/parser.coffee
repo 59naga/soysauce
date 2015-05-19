@@ -1,17 +1,20 @@
 # Dependencies
 Parser= require '../../src/parser'
 parser= new Parser
+parser.options.fold= no
+parser.options.standalone= no
 
 path= require 'path'
 fs= require 'fs'
 
 # Environment
-fixtureJson= path.join __dirname,'..','fixture.json'
-fixtureLog= path.join __dirname,'..','fixture.txt'
 TRAVIS_JOB_ID= 62974455
 
+fixtureJson= path.join __dirname,'..','fixture.json'
+fixtureLog= path.join __dirname,'..','fixture.txt'
+
 # Spec
-describe 'Fetch SauceLabs Job statuses via TravisCI',->
+describe 'Parser: Fetch SauceLabs Job statuses via TravisCI',->
   fixture= require fixtureJson
   travisLog= null
 
@@ -27,7 +30,7 @@ describe 'Fetch SauceLabs Job statuses via TravisCI',->
     expect(log).toBe key+'\n'+JSON.stringify(fixture)+'\n'+key
 
   it 'Fetch log.txt',(done)->
-    parser.fetch TRAVIS_JOB_ID,(error,log)->
+    parser.widget TRAVIS_JOB_ID,(error,log)->
       travisLog= log
 
       expect(error).toBe null

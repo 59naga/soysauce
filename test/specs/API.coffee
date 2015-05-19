@@ -1,5 +1,7 @@
 # Dependencies
 soysauce= require '../../'
+soysauce.options.fold= no
+soysauce.options.standalone= no
 Parser= require '../../src/parser'
 
 fs= require 'fs'
@@ -9,10 +11,11 @@ _= require 'lodash'
 express= require 'express'
 
 # Environment
+TRAVIS_JOB_ID= 62974455
+
 fixtureJson= path.join __dirname,'..','fixture.json'
 fixture= JSON.parse fs.readFileSync(fixtureJson).toString()
 fixtureIds= _.pluck fixture,'id'
-TRAVIS_JOB_ID= 62974455
 
 # Specs
 describe 'API',->
@@ -36,8 +39,7 @@ describe 'API',->
       done()
 
   it 'Fetch widget.svg via TravisCI',(done)->
-    soysauce.options.standalone= off
-    soysauce.fetch TRAVIS_JOB_ID
+    soysauce.widget TRAVIS_JOB_ID
     .then (svg)->
 
       expect(svg).toBe svg
