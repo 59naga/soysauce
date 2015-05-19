@@ -16,13 +16,13 @@ describe 'Fetch SauceLabs Job statuses via TravisCI',->
   travisLog= null
 
   it 'Write widget.json',->
-    log= parser.report fixture
+    log= parser.stringify fixture
 
     expect(log).toBe JSON.stringify fixture,null,2
 
   it 'Write widget.json for log.txt',->
     key= parser.getKey TRAVIS_JOB_ID
-    log= parser.report fixture,TRAVIS_JOB_ID
+    log= parser.stringify fixture,TRAVIS_JOB_ID
 
     expect(log).toBe key+'\n'+JSON.stringify(fixture)+'\n'+key
 

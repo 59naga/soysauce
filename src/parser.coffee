@@ -3,6 +3,7 @@ Build= require './build'
 Widget= require './widget'
 
 request= require 'request'
+travisFold= require 'travis-fold'
 
 fs= require 'fs'
 path= require 'path'
@@ -22,14 +23,19 @@ class Parser
   getKey: (id='UNKNOWN')->
     '=====TRAVIS_JOB_'+id+'_RESULT====='
 
-  report: (statuses,id)->
+  stringify: (statuses,id)->
     key= @getKey id
 
     if id
-      report= key+'\n'+(JSON.stringify statuses)+'\n'+key
+      widgetData= key+'\n'+(JSON.stringify statuses)+'\n'+key
     else
-      report= JSON.stringify statuses,null,2
-    report
+      widgetData= JSON.stringify statuses,null,2
+
+    data= ''
+    data+= travisFold.start 'soysauce' if id
+    data+= widgetData
+    data+= travisFold.end 'soysauce' if id
+    data
 
   fetch: (id,callback)->
     request travisLogUrl+id+'/log.txt',(error,response)->

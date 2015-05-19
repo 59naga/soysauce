@@ -7,7 +7,6 @@ cli= new Command
 cliVersion= (require '../package').version
 
 Promise= require 'bluebird'
-travisFold= require 'travis-fold'
 
 path= require 'path'
 fs= Promise.promisifyAll(require 'fs')
@@ -92,13 +91,7 @@ class Soysauce extends Parser
 
     Promise.all promises
     .then (statuses)=>
-      widgetData= super statuses,travisJobId
-
-      data= ''
-      data+= travisFold.start 'soysauce' if travisJobId
-      data+= widgetData
-      data+= travisFold.end 'soysauce' if travisJobId
-      data
+      @stringify statuses,travisJobId
 
   fetch: (travisJobId)->
     new Promise (resolve,reject)=>

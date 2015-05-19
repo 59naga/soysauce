@@ -1,7 +1,6 @@
 # Dependencies
 soysauce= require '../../'
 Parser= require '../../src/parser'
-parser= new Parser
 
 fs= require 'fs'
 path= require 'path'
@@ -11,17 +10,23 @@ express= require 'express'
 
 # Environment
 fixtureJson= path.join __dirname,'..','fixture.json'
+fixture= JSON.parse fs.readFileSync(fixtureJson).toString()
+fixtureIds= _.pluck fixture,'id'
 TRAVIS_JOB_ID= 62974455
 
 # Specs
 describe 'API',->
   it 'has Parser methods',->
+    parser= new Parser
     expect(soysauce.constructor.__super__).toEqual parser.__proto__
 
-  it 'Fetch widget.json',(done)->
-    fixture= JSON.parse fs.readFileSync(fixtureJson).toString()
-    fixtureIds= _.pluck fixture,'id'
+  it 'Create widget.json for zuul',->
+    key= soysauce.getKey TRAVIS_JOB_ID
+    log= soysauce.stringify fixture,TRAVIS_JOB_ID
 
+    expect(log).toBe key+'\n'+JSON.stringify(fixture)+'\n'+key
+
+  it 'Fetch widget.json',(done)->
     soysauce.report 59798,fixtureIds
     .then (statuses)->
       ids= _.pluck (JSON.parse statuses),'id'
