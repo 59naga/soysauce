@@ -75,7 +75,7 @@ class Soysauce extends Parser
       process.stdout.write widget if @stdout
       process.exit 0
 
-  report: (username,sauceJobIds,travisJobId)->
+  report: (username,sauceJobIds,travisJobId=null)->
     promises=
       for id in sauceJobIds
         promise=
@@ -91,18 +91,18 @@ class Soysauce extends Parser
       widgetData= super statuses,travisJobId
 
       data= ''
-      data+= travisFold.start 'soysauce'
+      data+= travisFold.start 'soysauce' if travisJobId
       data+= widgetData
-      data+= travisFold.end 'soysauce'
+      data+= travisFold.end 'soysauce' if travisJobId
       data
 
-  fetch: (logId)->
+  fetch: (travisJobId)->
     new Promise (resolve,reject)=>
-      super logId,(error,raw)=>
+      super travisJobId,(error,raw)=>
         return reject error if error?
 
         try
-          data= @parse raw,logId
+          data= @parse raw,travisJobId
         catch
           data= {}
 
