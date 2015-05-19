@@ -23,11 +23,11 @@ class Parser
   getPrefix: (travisJobId)->
     prefix= ''
     prefix+= 'travis_fold:start:widget\n'
-    prefix+= @getKey()+'\n'
+    prefix+= @getKey(travisJobId)+'\n'
     prefix
   getSuffix: (travisJobId)->
     suffix= ''
-    suffix+= @getKey()+'\n'
+    suffix+= @getKey(travisJobId)+'\n'
     suffix+= 'travis_fold:end:widget\n'
     suffix
 
