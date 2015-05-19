@@ -21,6 +21,7 @@ class Middleware extends Parser
       @widget req.params.id,(error,log)=>
         statuses= @parse log,req.params.id
         svg= @render statuses
+        res.set 'Cache-Control','no-cache'
         res.set 'Content-Type','image/svg+xml'
         res.end svg
 
@@ -38,6 +39,7 @@ class Middleware extends Parser
 
           statuses= @parse log,latestJobId
           svg= @render statuses
+          res.set 'Cache-Control','no-cache'
           res.set 'Content-Type','image/svg+xml'
           res.end svg
       
