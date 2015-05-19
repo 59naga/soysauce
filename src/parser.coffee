@@ -32,10 +32,8 @@ class Parser
     else
       widgetData= JSON.stringify statuses,null,2
 
-    data= ''
-    data+= travisFold.start 'soysauce' if @fold
-    data+= widgetData
-    data+= travisFold.end 'soysauce' if @fold
+    data= widgetData
+    data= travisFold.wrap 'soysauce',data if @fold
     data
 
   widget: (id,callback)->
