@@ -1,0 +1,32 @@
+name: 'default'
+
+build:
+  color: white
+  background: '#232D34'
+
+passed:
+  color: white
+  background: limegreen
+
+falling:
+  color: white
+  background: lightcoral
+
+unknown:
+  color: white
+  background: gray
+
+icons:
+  ipad: 'ipad_64x64.png'
+  iphone: 'iphone_64x64.png'
+  android: 'android_64x64.png'
+  firefox: 'firefox_64x64.png'
+  safari: 'safari_64x64.png'
+  googlechrome: 'chrome_64x64.png'
+  opera: 'opera_64x64.png'
+  iexplore: 'ie_64x64.png'
+
+osIcons:
+  mac: 'mac_64x64.png'
+  windows: 'windows_64x64.png'
+  linux: 'linux_64x64.png'

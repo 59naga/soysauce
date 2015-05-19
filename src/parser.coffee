@@ -1,5 +1,5 @@
 # Dependencies
-Browser= require './browser'
+Build= require './build'
 Widget= require './widget'
 
 request= require 'request'
@@ -8,66 +8,69 @@ fs= require 'fs'
 path= require 'path'
 
 # Private
+sauceLabsUrl= 'https://saucelabs.com/rest/v1/'
 travisLogUrl= 'https://api.travis-ci.org/jobs/'
-saucelabsNames= [
-  'ipad'
-  'firefox'
-  'iphone'
-  'safari'
-  'googlechrome'
-  'opera'
-  'iexplore'
-  'android'
-]
 
 class Parser
-  iconPath: path.resolve __dirname,'..','icons'
+  constructor: (@options={})->
+    @options.standalone?= yes
+
+  fetchBuild: (username,sessionId,callback)->
+    request sauceLabsUrl+username+'/jobs/'+sessionId,(error,response)->
+      callback error,response.body
 
   getKey: (id='UNKNOWN')->
     '=====TRAVIS_JOB_'+id+'_RESULT====='
 
-  encrypt: (statuses,id)->
+  report: (statuses,id=process.env.TRAVIS_JOB_ID)->
     key= @getKey id
-    key+JSON.stringify(statuses)+key
 
-  fetchLog: (id,callback)->
+    if id
+      report= key+'\n'+(JSON.stringify statuses)+'\n'+key
+    else
+      report= JSON.stringify statuses,null,2
+    report
+
+  fetch: (id,callback)->
     request travisLogUrl+id+'/log.txt',(error,response)->
       callback error,response.body
 
-  parse: (travisLog,id)->
+  parse: (log,id)->
     statuses= []
     
     key= @getKey id
 
-    begin= travisLog.indexOf key
+    begin= log.indexOf key
     begin+= key.length if begin > -1
-    end= travisLog.indexOf key,begin
-    json= travisLog.slice begin,end if begin > -1
+    end= log.indexOf key,begin
+    json= log.slice begin,end if begin > -1
 
     statuses= JSON.parse json if json?
     statuses
 
-  render: (statuses,options={})->
+  render: (statuses)->
     columns= 0
     rows= 0
 
+    widget= new Widget
+
     builds= []
-    for name in saucelabsNames
-      browser= new Browser name,statuses
+    for name,full of Build::names
+      browser= new Build name,statuses,widget.theme.icons,widget.theme.osIcons
       if browser.builds.length
         rows= browser.builds.length if rows< browser.builds.length
         builds.push browser
     columns= builds.length
 
-    widget= new Widget columns,rows
+    widget.svg columns,rows
     for browser,i in builds
       widget.svg.append widget.h1 browser,i
       widget.svg.append widget.ul browser,i
 
-    if options.standalone
+    if @options.standalone
       images= widget.document('image')
       for image in images
-        imagePath= path.join @iconPath,image.attribs['xlink:href']
+        imagePath= path.join widget.themePath,image.attribs['xlink:href']
         imageBase64= fs.readFileSync(imagePath).toString 'base64'
         datauri= 'data:image/png;base64,'+imageBase64
 

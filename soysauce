@@ -2,14 +2,17 @@
 
 var Soysauce;
 if(require('module')._extensions['.coffee']==null){
-  Soysauce= require('./lib');
+  require('coffee-script/register');
+  Soysauce= require('./src');
+  // Soysauce= require('./lib');
 }
 else{
   Soysauce= require('./src');
 }
 
+var soysauce;
+soysauce= new Soysauce;
 if(module.parent===null){
-  new Soysauce().cli(process.argv);
+  soysauce.cli(process.argv);
 }
-
-module.exports= Soysauce;
+module.exports= soysauce;

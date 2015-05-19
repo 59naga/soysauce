@@ -1,41 +1,50 @@
 # Soysauce [![NPM version][npm-image]][npm] [![Build Status][travis-image]][travis] [![Coverage Status][coveralls-image]][coveralls]
 
-> Create SauceLabs browser matrix widget for [Zuul](https://github.com/59naga/zuul)
+> Create SauceLabs browser matrix widget
 
 [![Sauce Test Status][sauce-image]][sauce]
 
 ## Installation
 ```bash
 $ npm install soysauce --global
+
+$ soysauce fetch
+# <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60" height="16" viewBox="0 0 60 16">
+#   <rect x="0" y="0" width="60" height="16" fill="gray" />
+#   <text x="4" y="11" fill="#dadada" font-size="7">Build unknown</text>
+# </svg>
 ```
 
 ## CLI
 ```bash
-#  Usage: soysauce path/to/statuses.json [options]
+#  Usage: soysauce (widget.json / log.txt) [options]
+#
+#
+#  Commands:
+#
+#    report <username> [job_id...]  Output widget.json
+#    fetch <log_id>                 Output widget.svg via Travis-CI log.txt
 #
 #  Options:
 #
 #    -h, --help           output usage information
 #    -V, --version        output the version number
-#    -p, --print          Print to stdout widget SVG
-#    -e, --export [path]  Write widget SVG to [widget.svg]
-#    -s, --stdio          Stdin-out widget SVG
+#    -o, --output [path]  Output to [./widget].svg
 ```
 
-### Use zuul
-[See example](https://github.com/59798/zuul-example)
+### Use TravisCI log.txt
 
 ### Use Stdin-out
 Create `widget.svg` by Pass [SauceLabs-job-statuses][1] to CLI
 
 ```bash
-$ curl https://saucelabs.com/rest/v1/my_awesome_username/jobs?limit=10\&full=true | soysauce --stdio > widget.svg
+$ curl https://saucelabs.com/rest/v1/my_awesome_username/jobs?limit=10\&full=true | soysauce > widget.svg
 ```
 
 [1]: https://docs.saucelabs.com/reference/rest-api/#full-jobs
 
 ### Use json
-or Use `statuses.json` like a below:
+or Use `widget.json` like a below:
 
 ```json
 [
@@ -74,8 +83,32 @@ or Use `statuses.json` like a below:
 ```
 
 ```bash
-$ soysauce statuses.json --export widget.svg
+# Output to filename
+$ soysauce widget.json --output widget.svg
+
+# Printout
+$ soycause widget.json
+#<svg version="1.1" ...>
+#  <rect x="0" y="0" width="460" height="16" fill="#232D34" />
+#  <g class="h1 firefox">...</g>
+#  <g class="ul">...</g>
+#  <g class="h1 googlechrome">...</g>
+#  <g class="ul">...</g>
+#  <g class="h1 iexplore">...</g>
+#  <g class="ul">...</g>
+#  <g class="h1 opera">...</g>
+#  <g class="ul">...</g>
+#  <g class="h1 safari">...</g>
+#  <g class="ul">...</g>
+#  <g class="h1 iphone">...</g>
+#  <g class="ul">...</g>
+#  <g class="h1 android">...</g>
+#  <g class="ul">...</g>
+#</svg>
 ```
+
+### Use zuul
+[See example](https://github.com/59798/zuul-example)
 
 License
 ---

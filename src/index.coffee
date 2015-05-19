@@ -1,64 +1,122 @@
 # Dependencies
 Parser= require './parser'
-Publisher= require './publisher'
+Middleware= require './middleware'
 
 Command= (require 'commander').Command
+cli= new Command
+cliVersion= (require '../package').version
+
+Promise= require 'bluebird'
+travisFold= require 'travis-fold'
 
 path= require 'path'
-fs= require 'fs'
+fs= Promise.promisifyAll(require 'fs')
 
 # Public
 class Soysauce extends Parser
   cli: (argv)->
-    command= new Command
-    command.version (require '../package').version
-    command.usage 'path/to/statuses.json [options]'
-    command.option '-p, --print', 'Print to stdout widget SVG'
-    command.option '-e, --export [path]', 'Write widget SVG to [widget.svg]'
-    command.option '-s, --stdio', 'Stdin-out widget SVG'
-    command.parse argv
-    command.help() if not command.stdio and command.args.length is 0
+    cli.version cliVersion
+    cli.usage '(widget.json / log.txt) [options]'
+    cli.option '-o, --output [path]','Output to [./widget].svg'
 
-    if command.stdio
-      data= ''
+    cli
+      .command 'report <username> [job_id...]'
+      .description 'Output widget.json by SauceLabs Job API'
+      .action =>
+        @report arguments...
+        .then (data)->
+          console.log data
 
-      process.stdin.resume()
-      process.stdin.setEncoding 'utf8'
-      process.stdin.on 'data',(chunk)->
-        data+= chunk
-      process.stdin.on 'end',=>
-        statuses= JSON.parse data
-        svg= @render statuses,standalone:yes
+    cli
+      .command 'fetch [log_id]'
+      .description 'Output widget.svg via Travis-CI log.txt'
+      .action =>
+        @fetch arguments...
+        .then (svg)->
+          console.log svg
 
-        process.stdout.write svg
-        process.exit 0
+    cli.parse argv
 
-    else
-      statusesPath= path.resolve process.cwd(),command.args[0]
-      statuses= require statusesPath
+    # Command mode
+    delay= 500
+    delayId=
+      setTimeout =>
+        process.stdin.pause()
 
-      if command.print
-        svg= @render statuses,standalone:yes
+        return cli.help() if cli.args.length is 0
+        return if 'report' in cli.rawArgs
+        return if 'fetch' in cli.rawArgs
 
-        process.stdout.write svg
-        process.exit 0
+        dataPath= path.resolve process.cwd(),cli.args[0]
+        try
+          raw= fs.readFileSync(dataPath).toString()
+          data= JSON.parse raw if dataPath.match /.json$/
+          data= @parse raw unless dataPath.match /.json$/
+        catch
+          data= {}
 
-      if command.export
-        fileName= command.export
-        fileName= 'widget.svg' if command.export is yes
-        filePath= path.relative process.cwd(),fileName
+        widget= @render data
+        return @output(cli.output,widget) if cli.output
+        return process.stdout.write widget
+      ,delay
 
-        svg= @render statuses,standalone:yes
-        fs.writeFileSync filePath,svg
+    # Stdin mode
+    processData= ''
+    process.stdin.resume()
+    process.stdin.setEncoding 'utf8'
+    process.stdin.on 'data',(chunk)->
+      clearTimeout delayId
 
-        process.exit 0
+      processData+= chunk
+    process.stdin.on 'end',=>
+      statuses= JSON.parse processData
+      widget= @render statuses
 
-      # Write for TravisCI log.txt
-      process.stdout.write @encrypt statuses,process.env.TRAVIS_JOB_ID
+      process.stdout.write widget if @stdout
       process.exit 0
 
+  report: (username,ids)->
+    promises=
+      for id in ids
+        promise=
+          Promise.resolve id
+          .then (id)->
+            new Promise (resolve,reject)->
+              Parser::fetchBuild username,id,(error,status)->
+                resolve JSON.parse status unless error
+                reject error if error
+
+    Promise.all promises
+    .then (statuses)=>
+      widgetData= super statuses
+
+      data= ''
+      data+= travisFold.start 'soysauce'
+      data+= widgetData
+      data+= travisFold.end 'soysauce'
+      data
+
+  fetch: (logId)->
+    new Promise (resolve,reject)=>
+      super logId,(error,raw)=>
+        return reject error if error?
+
+        try
+          data= @parse raw,logId
+        catch
+          data= {}
+
+        resolve @render data
+
+  output: (fileName,file)->
+    fileName= 'widget' if fileName is yes
+    fileName+= '.svg' unless fileName.match /.svg$/
+    filePath= path.resolve process.cwd(),fileName
+
+    fs.writeFileAsync filePath,file
+
   middleware: ->
-    publisher= new Publisher arguments...
-    publisher.middleware
+    middleware= new Middleware arguments...
+    middleware.middleware
 
 module.exports= Soysauce

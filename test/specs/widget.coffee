@@ -1,6 +1,5 @@
 # Dependencies
-Soysauce= require '../../'
-soysauce= new Soysauce
+soysauce= require '../../'
 
 cheerio= require 'cheerio'
 
@@ -11,7 +10,7 @@ fs= require 'fs'
 fixturePath= path.join __dirname,'..','fixture.json'
 
 # Spec
-describe 'SauceLabs browser matrix widget',->
+describe 'Browser matrix widget',->
   it 'Create',->
     fixture= require fixturePath
 
@@ -20,7 +19,7 @@ describe 'SauceLabs browser matrix widget',->
 
     expect($('g.li').length).toBe fixture.length
 
-  it 'Create unknown statuses',->
+  it 'Create build unknown',->
     fixture= require fixturePath
 
     svg= soysauce.render []
@@ -30,7 +29,7 @@ describe 'SauceLabs browser matrix widget',->
 
     expect($('text').text()).toBe 'Build unknown'
 
-  it 'Create Standalone SVG',->
+  it 'Create standalone',->
     fixture= require fixturePath
 
     svg= soysauce.render fixture,standalone:yes
