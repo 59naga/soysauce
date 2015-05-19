@@ -1,8 +1,6 @@
 # Dependencies
 Parser= require '../../src/parser'
 parser= new Parser
-parser.options.fold= no
-parser.options.standalone= no
 
 path= require 'path'
 fs= require 'fs'
@@ -21,13 +19,14 @@ describe 'Parser: Fetch SauceLabs Job statuses via TravisCI',->
   it 'Write widget.json',->
     log= parser.stringify fixture
 
-    expect(log).toBe (JSON.stringify fixture,null,2)+'\n'
+    expect(log).toBe JSON.stringify fixture,null,2
 
   it 'Write widget.json for log.txt',->
-    key= parser.getKey TRAVIS_JOB_ID
+    prefix= parser.getPrefix TRAVIS_JOB_ID
+    suffix= parser.getSuffix TRAVIS_JOB_ID
     log= parser.stringify fixture,TRAVIS_JOB_ID
 
-    expect(log).toBe key+'\n'+JSON.stringify(fixture)+'\n'+key+'\n'
+    expect(log).toBe prefix+JSON.stringify(fixture)+suffix
 
   it 'Fetch log.txt',(done)->
     parser.widget TRAVIS_JOB_ID,(error,log)->

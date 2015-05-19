@@ -3,13 +3,13 @@
   "main": "soysauce",
   "bin":  "soysauce",
   "description": "Create SauceLabs browser matrix widget",
-  "version": "0.0.4-beta.1",
+  "version": "0.0.4",
 
   "scripts": {
     "postinstall": "coffee -o lib -c src",
 
-    "start": "jasminetea test --file '*.coffee' --verbose --watch --recursive --timeout 5000",
-    "test": "jasminetea test --file '*.coffee' --verbose --recursive --cover --lint --report --timeout 5000"
+    "start": "jasminetea test --file '*.coffee' --verbose --watch --recursive --timeout 6000",
+    "test": "jasminetea test --file '*.coffee' --verbose --recursive --cover --lint --report --timeout 6000"
   },
   
   "dependencies": {

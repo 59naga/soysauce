@@ -1,7 +1,5 @@
 # Dependencies
 soysauce= require '../../'
-soysauce.options.fold= no
-soysauce.options.standalone= no
 Parser= require '../../src/parser'
 
 fs= require 'fs'
@@ -24,10 +22,11 @@ describe 'API',->
     expect(soysauce.constructor.__super__).toEqual parser.__proto__
 
   it 'Create widget.json for zuul',->
-    key= soysauce.getKey TRAVIS_JOB_ID
+    prefix= soysauce.getPrefix TRAVIS_JOB_ID
+    suffix= soysauce.getSuffix TRAVIS_JOB_ID
     log= soysauce.stringify fixture,TRAVIS_JOB_ID
 
-    expect(log).toBe key+'\n'+JSON.stringify(fixture)+'\n'+key+'\n'
+    expect(log).toBe prefix+JSON.stringify(fixture)+suffix
 
   it 'Fetch widget.json',(done)->
     soysauce.report 59798,fixtureIds

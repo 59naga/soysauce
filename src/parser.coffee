@@ -12,39 +12,45 @@ sauceLabsUrl= 'https://saucelabs.com/rest/v1/'
 travisLogUrl= 'https://s3.amazonaws.com/archive.travis-ci.org/jobs/'
 
 class Parser
-  constructor: (@options={})->
-    @options.fold?= yes
-    @options.standalone?= yes
+  constructor: (@datauri=on)->
 
   fetchBuild: (username,sessionId,callback)->
     request sauceLabsUrl+username+'/jobs/'+sessionId,(error,response)->
       callback error,response.body
 
-  getKey: (id='UNKNOWN')->
-    '=====TRAVIS_JOB_'+id+'_RESULT====='
+  getKey: (travisJobId='UNKNOWN')->
+    '=====TRAVIS_JOB_'+travisJobId+'_RESULT====='
+  getPrefix: (travisJobId)->
+    prefix= ''
+    prefix+= 'travis_fold:start:widget\n'
+    prefix+= @getKey()+'\n'
+    prefix
+  getSuffix: (travisJobId)->
+    suffix= ''
+    suffix+= @getKey()+'\n'
+    suffix+= 'travis_fold:end:widget\n'
+    suffix
 
-  stringify: (statuses,id)->
-    key= @getKey id
-
-    if id
-      widgetData= key+'\n'+(JSON.stringify statuses)+'\n'+key
-    else
-      widgetData= JSON.stringify statuses,null,2
-
+  stringify: (statuses,travisJobId)->
     data= ''
-    data+= 'travis_fold:start:widget\n' if @options.fold
-    data+= widgetData+'\n'
-    data+= 'travis_fold:end:widget\n' if @options.fold
+
+    if travisJobId
+      data+= @getPrefix travisJobId
+      data+= JSON.stringify statuses
+      data+= @getSuffix travisJobId
+    else
+      data= JSON.stringify statuses,null,2
+
     data
 
-  widget: (id,callback)->
-    request travisLogUrl+id+'/log.txt',(error,response)->
+  widget: (travisJobId,callback)->
+    request travisLogUrl+travisJobId+'/log.txt',(error,response)->
       callback error,response.body,response.headers
 
-  parse: (log,id)->
+  parse: (log,travisJobId)->
     statuses= []
     
-    key= @getKey id
+    key= @getKey travisJobId
 
     begin= log.indexOf key
     begin+= key.length if begin > -1
@@ -73,7 +79,7 @@ class Parser
       widget.svg.append widget.h1 browser,i
       widget.svg.append widget.ul browser,i
 
-    if @options.standalone
+    if @datauri
       images= widget.document('image')
       for image in images
         imagePath= path.join widget.themePath,image.attribs['xlink:href']

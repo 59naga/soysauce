@@ -1,7 +1,5 @@
 # Dependencies
 soysauce= require '../../'
-soysauce.options.fold= no
-soysauce.options.standalone= no
 
 cheerio= require 'cheerio'
 
@@ -27,8 +25,6 @@ describe 'Widget: Browser matrix widget',->
     svg= soysauce.render []
     $= cheerio.load svg
 
-    # fs.writeFileSync fixturePath.replace(/.json$/,'.svg'),svg
-
     expect($('text').text()).toBe 'Build unknown'
 
   it 'Create standalone',->
@@ -38,8 +34,6 @@ describe 'Widget: Browser matrix widget',->
     $= cheerio.load svg
     builds= $ 'g.li'
     hrefs= $('image').map(->$(this).attr 'xlink:href').get().toString()
-
-    # fs.writeFileSync fixturePath.replace(/.json$/,'.svg'),svg
 
     expect(builds.length).toBe fixture.length
     expect(hrefs).not.toMatch 'http:\/\/'

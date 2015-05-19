@@ -1,7 +1,5 @@
 # Dependencies
 soysauce= require '../../'
-soysauce.options.fold= no
-soysauce.options.standalone= no
 
 express= require 'express'
 request= require 'request'
