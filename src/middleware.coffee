@@ -12,14 +12,11 @@ class Middleware extends Parser
   api: 'https://api.travis-ci.org/repos/'
   gui: 'https://travis-ci.org/'
   
-  constructor: (@cache,@widgetDir)->
-    super(standalone:off)
-    
-    @widgetDir?= path.join process.cwd(),'widgets'
+  constructor: ->
+    super
 
     @middleware= express.Router()
     @middleware.use express.static new Widget().themePath
-    @middleware.use '/:user/',express.static new Widget().themePath
     @middleware.get '/:id(\\d+)',(req,res,next)=>
       @widget req.params.id,(error,body,headers)->
         return res.status(500).end(error.message) if error
