@@ -9,7 +9,7 @@ path= require 'path'
 
 # Private
 sauceLabsUrl= 'https://saucelabs.com/rest/v1/'
-travisLogUrl= 'https://api.travis-ci.org/jobs/'
+travisLogUrl= 'https://s3.amazonaws.com/archive.travis-ci.org/jobs/'
 
 class Parser
   constructor: (@options={})->
@@ -39,7 +39,7 @@ class Parser
 
   widget: (id,callback)->
     request travisLogUrl+id+'/log.txt',(error,response)->
-      callback error,response.body
+      callback error,response.body,response.headers
 
   parse: (log,id)->
     statuses= []

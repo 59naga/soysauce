@@ -3,7 +3,7 @@
   "main": "soysauce",
   "bin":  "soysauce",
   "description": "Create SauceLabs browser matrix widget",
-  "version": "0.0.3-beta.1",
+  "version": "0.0.4-beta.0",
 
   "scripts": {
     "postinstall": "coffee -o lib -c src",
@@ -27,6 +27,13 @@
     "lodash": "^3.8.0"
   },
 
+  "keywords": [
+    "saucelabs",
+    "widget",
+    "badge",
+    "express",
+    "zuul"
+  ],
   "author": "59naga <i59naga@icloud.com> (http://berabou.me)",
   "license": "MIT",
   "repository": {

@@ -40,6 +40,8 @@ describe 'Middleware: Travis log.txt parser',->
 
       expect(error).toBe null
       expect(response.statusCode).toBe 200
+      expect(response.headers['pragma']).toBe 'no-cache'
+      expect(response.headers['cache-control']).toBe 'no-cache'
       expect(response.headers['content-type']).toBe 'image/svg+xml'
       expect($('text').text()).not.toBe 'Build unknown'
       done()
@@ -52,6 +54,8 @@ describe 'Middleware: Travis log.txt parser',->
 
       expect(error).toBe null
       expect(response.statusCode).toBe 200
+      expect(response.headers['pragma']).toBe 'no-cache'
+      expect(response.headers['cache-control']).toBe 'no-cache'
       expect(response.headers['content-type']).toBe 'image/svg+xml'
       expect($('text').text()).toBe 'Build unknown'
       done()

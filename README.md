@@ -85,6 +85,40 @@ $ soycause widget.json
 # </svg>
 ```
 
+## Use express4
+```bash
+$ npm install express soysauce --save
+```
+```js
+var express= require('express');
+var soysauce= require('soysauce');
+
+var app= express();
+app.use(soysauce.middleware());
+app.listen(8000);
+// Listen to http://localhost:8000
+```
+```bash
+$ curl http://localhost:8000/59798/zuul-example.svg
+# <svg version="1.1" ...>
+#   <rect x="0" y="0" width="460" height="16" fill="#232D34" />
+#   <g class="h1 firefox">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 googlechrome">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 iexplore">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 opera">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 safari">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 iphone">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 android">...</g>
+#   <g class="ul">...</g>
+# </svg>
+```
+
 ## Use zuul
 [See example](https://github.com/59798/zuul-example)
 
