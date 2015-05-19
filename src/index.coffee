@@ -69,10 +69,14 @@ class Soysauce extends Parser
 
       processData+= chunk
     process.stdin.on 'end',=>
-      statuses= JSON.parse processData
-      widget= @render statuses
+      try
+        data= JSON.parse processData
+      catch
+        data= {}
 
-      process.stdout.write widget if @stdout
+      widget= @render data
+
+      process.stdout.write widget
       process.exit 0
 
   report: (username,sauceJobIds,travisJobId=null)->
