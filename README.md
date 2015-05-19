@@ -119,8 +119,89 @@ $ curl http://localhost:8000/59798/zuul-example.svg
 # </svg>
 ```
 
+### Force reload cache of `camo.githubusercontent.com`
+See: [Why do my images have strange URLs? - User Documentation](https://help.github.com/articles/why-do-my-images-have-strange-urls/)
+
 ## Use zuul
-[See example](https://github.com/59798/zuul-example)
+See:
+* [Cloud testing - zuul Wiki](https://github.com/defunctzombie/zuul/wiki/Cloud-testing)
+* [Travis ci - zuul Wiki](https://github.com/defunctzombie/zuul/wiki/Travis-ci)
+
+### Example
+Case: Jasmine2 cloud testing
+
+`~/.zuulrc`
+```yaml
+sauce_username: my_awesome_username
+sauce_key: 550e8400-e29b-41d4-a716-446655440000
+```
+
+`./test.js`
+```js
+describe('Hello',function(){
+  var fixture;
+
+  beforeAll(function(){
+    expect(fixture).toBe(undefined);
+
+    fixture= 'foo';
+  });
+
+  it('world',function(done){
+    setTimeout(function(){
+      expect(fixture).toBe('foo');
+
+      fixture= null;
+      done();
+    },500);
+  });
+
+  afterAll(function(){
+    expect(fixture).toBe(null);
+
+    fixture= void 0;
+  });
+});
+```
+
+`./package.json`
+```json
+{
+  "devDependencies": {
+    "jasmine": "^2.3.1",
+    "zuul": "git://github.com/59naga/zuul.git"
+  },
+  "scripts": {
+    "test": "zuul test.js --report"
+  }
+}
+```
+
+`./.zuul.yaml`
+```yaml
+ui: jasmine2
+browsers:
+  - name: chrome
+    version: latest
+```
+
+Run
+
+```bash
+$ npm test
+# > zuul test.js --report
+
+# - testing: chrome @ Windows 2012 R2: 42
+# - queuing: <chrome 42 on Windows 2012 R2>
+# - starting: <chrome 42 on Windows 2012 R2>
+# - passed: <chrome 42 on Windows 2012 R2>
+# all browsers passed
+# skip 1 report cause TRAVIS_JOB_ID is null
+```
+
+### Demo
+* https://github.com/59798/zuul-example
+* https://github.com/59naga/history-json
 
 License
 ---
