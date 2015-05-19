@@ -94,7 +94,7 @@ License
 
 [License]: http://59naga.mit-license.org/
 
-[sauce-image]: http://soysauce.berabou.me/59798/zuul-example.svg?
+[sauce-image]: http://soysauce.berabou.me/59798/zuul-example.svg?master
 [sauce]: https://saucelabs.com/u/59798
 [npm-image]:https://img.shields.io/npm/v/soysauce.svg?style=flat-square
 [npm]: https://npmjs.org/package/soysauce
