@@ -10,14 +10,27 @@ $ npm install soysauce --global
 $ soysauce -V
 # 0.0.2-beta.1
 
-$ soysauce fetch
-# <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60" height="16" viewBox="0 0 60 16">
-#   <rect x="0" y="0" width="60" height="16" fill="gray" />
-#   <text x="4" y="11" fill="#dadada" font-size="7">Build unknown</text>
+$ soysauce fetch 62974455
+# <svg version="1.1" ...>
+#   <rect x="0" y="0" width="460" height="16" fill="#232D34" />
+#   <g class="h1 firefox">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 googlechrome">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 iexplore">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 opera">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 safari">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 iphone">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 android">...</g>
+#   <g class="ul">...</g>
 # </svg>
 ```
 
-## CLI
+# CLI
 ```bash
 $ soysauce --help
 #  Usage: soysauce (widget.json / log.txt) [options]
@@ -35,40 +48,44 @@ $ soysauce --help
 #    -o, --output [path]  Output to [./widget].svg
 ```
 
-### Use SauceLabs REST API
+## Use SauceLabs REST API
 ```bash
 $ curl https://saucelabs.com/rest/v1/my_awesome_username/jobs?limit=10\&full=true | soysauce
+# <svg version="1.1" ...>
+#   <rect x="0" y="0" width="60" height="16" fill="gray" />
+#   <text x="4" y="11" fill="#dadada" font-size="7">Build unknown</text>
+# </svg>
 ```
 
-[1]: https://docs.saucelabs.com/reference/rest-api/#full-jobs
+> https://docs.saucelabs.com/reference/rest-api/#full-jobs
 
-### Use widget.json
+## Use widget.json
 ```bash
 # Output to filename
 $ soysauce widget.json --output widget.svg
 
 # Printout
 $ soycause widget.json
-#<svg version="1.1" ...>
-#  <rect x="0" y="0" width="460" height="16" fill="#232D34" />
-#  <g class="h1 firefox">...</g>
-#  <g class="ul">...</g>
-#  <g class="h1 googlechrome">...</g>
-#  <g class="ul">...</g>
-#  <g class="h1 iexplore">...</g>
-#  <g class="ul">...</g>
-#  <g class="h1 opera">...</g>
-#  <g class="ul">...</g>
-#  <g class="h1 safari">...</g>
-#  <g class="ul">...</g>
-#  <g class="h1 iphone">...</g>
-#  <g class="ul">...</g>
-#  <g class="h1 android">...</g>
-#  <g class="ul">...</g>
-#</svg>
+# <svg version="1.1" ...>
+#   <rect x="0" y="0" width="460" height="16" fill="#232D34" />
+#   <g class="h1 firefox">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 googlechrome">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 iexplore">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 opera">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 safari">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 iphone">...</g>
+#   <g class="ul">...</g>
+#   <g class="h1 android">...</g>
+#   <g class="ul">...</g>
+# </svg>
 ```
 
-### Use zuul
+## Use zuul
 [See example](https://github.com/59798/zuul-example)
 
 License
