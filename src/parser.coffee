@@ -22,7 +22,7 @@ class Parser
   getKey: (id='UNKNOWN')->
     '=====TRAVIS_JOB_'+id+'_RESULT====='
 
-  report: (statuses,id=process.env.TRAVIS_JOB_ID)->
+  report: (statuses,id)->
     key= @getKey id
 
     if id

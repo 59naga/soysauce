@@ -22,8 +22,8 @@ class Soysauce extends Parser
     cli
       .command 'report <username> [job_id...]'
       .description 'Output widget.json by SauceLabs Job API'
-      .action =>
-        @report arguments...
+      .action (username,sauceJobIds)=>
+        @report username,sauceJobIds,process.env.TRAVIS_JOB_ID
         .then (data)->
           console.log data
 
@@ -75,9 +75,9 @@ class Soysauce extends Parser
       process.stdout.write widget if @stdout
       process.exit 0
 
-  report: (username,ids)->
+  report: (username,sauceJobIds,travisJobId)->
     promises=
-      for id in ids
+      for id in sauceJobIds
         promise=
           Promise.resolve id
           .then (id)->
@@ -88,7 +88,7 @@ class Soysauce extends Parser
 
     Promise.all promises
     .then (statuses)=>
-      widgetData= super statuses
+      widgetData= super statuses,travisJobId
 
       data= ''
       data+= travisFold.start 'soysauce'
