@@ -50,6 +50,10 @@ class Widget
 
     # [Build unknown]
     if @count is 0
+
+      @svg.attr 'width',(@svg.attr 'width')*2
+      @svg.attr 'height',(@svg.attr 'height')*2
+
       text= @document '<text/>'
       text.attr
         x: 4

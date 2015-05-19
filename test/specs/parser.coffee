@@ -21,13 +21,13 @@ describe 'Parser: Fetch SauceLabs Job statuses via TravisCI',->
   it 'Write widget.json',->
     log= parser.stringify fixture
 
-    expect(log).toBe JSON.stringify fixture,null,2
+    expect(log).toBe (JSON.stringify fixture,null,2)+'\n'
 
   it 'Write widget.json for log.txt',->
     key= parser.getKey TRAVIS_JOB_ID
     log= parser.stringify fixture,TRAVIS_JOB_ID
 
-    expect(log).toBe key+'\n'+JSON.stringify(fixture)+'\n'+key
+    expect(log).toBe key+'\n'+JSON.stringify(fixture)+'\n'+key+'\n'
 
   it 'Fetch log.txt',(done)->
     parser.widget TRAVIS_JOB_ID,(error,log)->

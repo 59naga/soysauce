@@ -24,7 +24,7 @@ class Soysauce extends Parser
       .action (username,sauceJobIds)=>
         @report username,sauceJobIds,process.env.TRAVIS_JOB_ID
         .then (report)->
-          console.log report
+          process.stdout.write report
 
     cli
       .command 'widget [log_id]'

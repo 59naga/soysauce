@@ -3,7 +3,6 @@ Build= require './build'
 Widget= require './widget'
 
 request= require 'request'
-travisFold= require 'travis-fold'
 
 fs= require 'fs'
 path= require 'path'
@@ -33,9 +32,9 @@ class Parser
       widgetData= JSON.stringify statuses,null,2
 
     data= ''
-    data+= travisFold.start 'soysauce' if @fold
-    data+= widgetData
-    data+= travisFold.end 'soysauce' if @fold
+    data+= 'travis_fold:start:widget\n' if @options.fold
+    data+= widgetData+'\n'
+    data+= 'travis_fold:end:widget\n' if @options.fold
     data
 
   widget: (id,callback)->

@@ -27,7 +27,7 @@ describe 'API',->
     key= soysauce.getKey TRAVIS_JOB_ID
     log= soysauce.stringify fixture,TRAVIS_JOB_ID
 
-    expect(log).toBe key+'\n'+JSON.stringify(fixture)+'\n'+key
+    expect(log).toBe key+'\n'+JSON.stringify(fixture)+'\n'+key+'\n'
 
   it 'Fetch widget.json',(done)->
     soysauce.report 59798,fixtureIds
