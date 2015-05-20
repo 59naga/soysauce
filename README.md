@@ -136,13 +136,13 @@ $ curl http://localhost:8000/59798/zuul-example.svg
 ```
 
 ### Un-offical widget
-http://soysauce.berabou.me/ `travis_username` / `repository` .svg
+__http__://soysauce.berabou.me/ `travis_username` / `repository` .svg
 
 > Requirement `$ soysauce report <username> [job_id...]` in TravisCI
 
 e.g.:
-* https://soysauce.berabou.me/59798/zuul-example.svg
-* https://soysauce.berabou.me/59naga/history-json.svg
+* http://soysauce.berabou.me/59798/zuul-example.svg
+* http://soysauce.berabou.me/59naga/history-json.svg
 
 ### Force reload cache of `camo.githubusercontent.com`
 See: [Why do my images have strange URLs? - User Documentation](https://help.github.com/articles/why-do-my-images-have-strange-urls/)
