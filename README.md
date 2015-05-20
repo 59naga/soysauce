@@ -60,7 +60,7 @@ $ curl https://saucelabs.com/rest/v1/my_awesome_username/jobs?limit=10\&full=tru
 > https://docs.saucelabs.com/reference/rest-api/#full-jobs
 
 ## Output widget.json
-Type to `soysauce report my_awesome_username sauce_job_id sauce_job_id...`
+Type a `soysauce report my_awesome_username sauce_job_id sauce_job_id...`
 ```bash
 $ soysauce report 59798 c3791dd7c71446b18b5f340a5eb85f96
 # [{"browser_short_version":"7.1","video_url":"https://saucelabs.com/jobs/c3791dd7c71446b18b5f340a5eb85f96/video.flv","creation_time":1431931948,"custom-data":null,"browser_version":"7.1.","owner":"59798","automation_backend":"appium","id":"c3791dd7c71446b18b5f340a5eb85f96","record_screenshots":true,"record_video":true,"build":"21","passed":false,"public":"public","assigned_tunnel_id":null,"status":"complete","log_url":"https://saucelabs.com/jobs/c3791dd7c71446b18b5f340a5eb85f96/selenium-server.log","start_time":1431931948,"proxied":false,"modification_time":1431932018,"tags":[],"commands_not_successful":3,"name":"zuul-example","selenium_version":null,"manual":false,"end_time":1431932018,"error":null,"os":"Mac 10.9","breakpointed":null,"browser":"iphone"}]
