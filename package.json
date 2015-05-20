@@ -3,7 +3,7 @@
   "main": "soysauce",
   "bin":  "soysauce",
   "description": "Create SauceLabs browser matrix widget",
-  "version": "0.0.5-beta.0",
+  "version": "0.0.5-beta.1",
 
   "scripts": {
     "postinstall": "coffee -o lib -c src",

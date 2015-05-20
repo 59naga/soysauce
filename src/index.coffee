@@ -37,7 +37,7 @@ class Soysauce extends Parser
     cli.parse argv
 
     # Command mode
-    delay= 500
+    delay= 1000
     delayId=
       setTimeout =>
         process.stdin.pause()
