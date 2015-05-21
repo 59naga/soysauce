@@ -1,62 +1,68 @@
 # Dependencies
 Parser= require './parser'
-Widget= require './widget'
 
 express= require 'express'
 request= require 'request'
 
-path= require 'path'
-request= require 'request'
-
+# Public
 class Middleware extends Parser
-  api: 'https://api.travis-ci.org/repos/'
-  gui: 'https://travis-ci.org/'
+  API: 'https://api.travis-ci.org/repos/'
+  GUI: 'https://travis-ci.org/'
   
   constructor: ->
     super
 
     @middleware= express.Router()
-    @middleware.use express.static new Widget().themePath
-    @middleware.get '/:id(\\d+)',(req,res,next)=>
-      @widget req.params.id,(error,body,headers)->
-        return res.status(500).end(error.message) if error
+    @middleware.use (req,res,next)->
+      req.travis= {}
+      req.travis.s3= req.query.s3?
+      req.travis.cache= cacheDir if cacheDir?
 
-        req.widgetId= req.params.id
-        req.widget= {body,headers}
-        next()
+      next()
+
+    @middleware.get '/:jobId.svg',(req,res,next)->
+      req.travis.jobId= req.params.jobId
+      next()
 
     @middleware.get '/:user/:repo.svg',(req,res,next)=>
       slug= @getSlug req.params
 
-      uri= @api+ slug+ '/branches'
-      request uri,(error,response)=>
+      uri= @API+ slug+ '/branches'
+      request uri,(error,response)->
         return res.status(500).end(error.message) if error
 
         repo= JSON.parse response.body
-        latestJobId= repo.branches[0]?.job_ids[0]
-        @widget latestJobId,(error,body,headers)->
-          return res.status(500).end(error.message) if error
+        req.travis.jobId= repo.branches[0]?.job_ids[0]
+        next()
 
-          req.widgetId= latestJobId
-          req.widget= {body,headers}
-          next()
-
+    # jobId parser
     @middleware.use (req,res,next)=>
-      return next() unless req.widget?
+      return next() unless req.travis.jobId?
 
-      statuses= @parse req.widget.body,req.widgetId
-      svg= @render statuses
+      @widget req.travis.jobId, req.travis, (error,body,headers)->
+        return res.status(500).end(error.message) if error
+
+        req.travis.widgetId= req.travis.jobId
+        req.travis.widget= {body,headers}
+        next()
+
+    # widget parser
+    @middleware.use (req,res,next)=>
+      return next() unless req.travis.widget?
+
+      statuses= @parse req.travis.widget.body,req.travis.widgetId
+      svg= @render statuses,datauri:yes
       res.set 'Pragma','no-cache'
       res.set 'Cache-Control','no-cache'
       res.set 'Content-Type','image/svg+xml'
       res.set 'Content-Length',svg.length
-      res.set 'Last-Modified',req.widget.headers['last-modified']
+      res.set 'Last-Modified',req.travis.widget.headers['last-modified']
       res.end svg
 
     @middleware.get '/:user/:repo',(req,res)=>
       slug= @getSlug req.params
 
-      res.redirect @gui+ slug
+      res.redirect @GUI+ slug
 
     @middleware.use (req,res)->
       res.redirect 'https://github.com/59naga/soysauce/'

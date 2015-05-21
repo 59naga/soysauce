@@ -5,22 +5,16 @@ express= require 'express'
 request= require 'request'
 cheerio= require 'cheerio'
 
-path= require 'path'
-exec= (require 'child_process').exec
-
 # Environment
 TRAVIS_JOB_ID= 62974455
 PORT= 59798
 
-URL= 'http://localhost:'+PORT+'/'
-widgetUrl= '59naga/zuul-example.svg'
-clickedUrl= '59naga/zuul-example'
+domain= 'http://localhost:'+PORT+'/'
+# TODO Build Summary e.g: "10/10"
 
 # Specs
 describe 'Middleware: Travis log.txt parser',->
-  serverDir= path.join process.cwd(),'widgets'
   server= null
-
   beforeAll (done)->
     app= express()
     app.use soysauce.middleware()
@@ -31,9 +25,11 @@ describe 'Middleware: Travis log.txt parser',->
     server.close()
 
   it 'Get widget.svg',(done)->
-    options= {}
+    uri= domain+TRAVIS_JOB_ID+'.svg'
+    options=
+      followRedirect: off
 
-    request URL+TRAVIS_JOB_ID,options,(error,response)->
+    request uri,options,(error,response)->
       $= cheerio.load response.body
 
       expect(error).toBe null
@@ -45,9 +41,11 @@ describe 'Middleware: Travis log.txt parser',->
       done()
 
   it 'Get latest widget.svg',(done)->
-    options= {}
+    uri= domain+'59naga/abigail.svg'
+    options=
+      followRedirect: off
 
-    request URL+widgetUrl,options,(error,response)->
+    request uri,options,(error,response)->
       $= cheerio.load response.body
 
       expect(error).toBe null
@@ -59,11 +57,14 @@ describe 'Middleware: Travis log.txt parser',->
       done()
 
   it 'Redirect to travis-ci.org',(done)->
+    uri= domain+'59naga/zuul-example'
     options=
       followRedirect: off
 
-    request URL+clickedUrl,options,(error,response)->
+    request uri,options,(error,response)->
+      {statusCode, headers}= response
+
       expect(error).toBe null
-      expect(response.statusCode).toBe 302
-      expect(response.headers.location).toBe 'https://travis-ci.org/'+clickedUrl
+      expect(statusCode).toBe 302
+      expect(headers.location).toBe 'https://travis-ci.org/59naga/zuul-example'
       done()

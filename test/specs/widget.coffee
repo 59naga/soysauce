@@ -4,7 +4,6 @@ soysauce= require '../../'
 cheerio= require 'cheerio'
 
 path= require 'path'
-fs= require 'fs'
 
 # Environment
 fixturePath= path.join __dirname,'..','fixture.json'

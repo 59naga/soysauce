@@ -40,6 +40,7 @@ class Widget
 
     # [BACKGROUND-COLOR]
     rect= @document '<rect/>'
+    rect.attr class:'header'
     rect.attr
       x: 0
       y: 0

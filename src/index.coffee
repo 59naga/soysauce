@@ -54,7 +54,7 @@ class Soysauce extends Parser
         catch
           data= {}
 
-        widget= @render data
+        widget= @render data,datauri:yes
         return @output(cli.output,widget) if cli.output
         return process.stdout.write widget
       ,delay

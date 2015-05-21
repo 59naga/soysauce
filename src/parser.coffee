@@ -7,15 +7,14 @@ request= require 'request'
 fs= require 'fs'
 path= require 'path'
 
-# Private
-sauceLabsUrl= 'https://saucelabs.com/rest/v1/'
-travisLogUrl= 'https://s3.amazonaws.com/archive.travis-ci.org/jobs/'
-
+# Public
 class Parser
-  constructor: (@datauri=on)->
+  sauceLabsUrl: 'https://saucelabs.com/rest/v1/'
+  travisJobUrl: 'https://api.travis-ci.org/jobs/'
+  amazonLogUrl: 'https://s3.amazonaws.com/archive.travis-ci.org/jobs/'
 
   fetchBuild: (username,sessionId,callback)->
-    request sauceLabsUrl+username+'/jobs/'+sessionId,(error,response)->
+    request @sauceLabsUrl+username+'/jobs/'+sessionId,(error,response)->
       callback error,response.body
 
   getKey: (travisJobId='UNKNOWN')->
@@ -36,15 +35,17 @@ class Parser
 
     if travisJobId
       data+= @getPrefix travisJobId
-      data+= JSON.stringify statuses
+      data+= (JSON.stringify statuses)+'\n'
       data+= @getSuffix travisJobId
     else
       data= JSON.stringify statuses,null,2
 
     data
 
-  widget: (travisJobId,callback)->
-    request travisLogUrl+travisJobId+'/log.txt',(error,response)->
+  widget: (travisJobId,args...,callback)->
+    url= @travisJobUrl+travisJobId+'/log'
+    url= @amazonLogUrl+travisJobId+'/log.txt' if args[0]?.s3
+    request url,(error,response)->
       callback error,response.body,response.headers
 
   parse: (log,travisJobId)->
@@ -60,7 +61,7 @@ class Parser
     statuses= JSON.parse json if json?
     statuses
 
-  render: (statuses)->
+  render: (statuses,options={})->
     columns= 0
     rows= 0
 
@@ -79,7 +80,7 @@ class Parser
       widget.svg.append widget.h1 browser,i
       widget.svg.append widget.ul browser,i
 
-    if @datauri
+    if options.datauri
       images= widget.document('image')
       for image in images
         imagePath= path.join widget.themePath,image.attribs['xlink:href']

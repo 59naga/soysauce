@@ -26,7 +26,7 @@ describe 'API',->
     suffix= soysauce.getSuffix TRAVIS_JOB_ID
     log= soysauce.stringify fixture,TRAVIS_JOB_ID
 
-    expect(log).toBe prefix+JSON.stringify(fixture)+suffix
+    expect(log).toBe prefix+JSON.stringify(fixture)+'\n'+suffix
 
   it 'Fetch widget.json',(done)->
     soysauce.report 59798,fixtureIds
