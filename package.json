@@ -1,13 +1,14 @@
 {
   "name": "soysauce",
   "description": "Pretty SauceLabs browser matrix widget",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
 
   "bin": "soysauce",
   "files": [
     "soysauce",
     "index.js",
-    "lib"
+    "lib",
+    "themes"
   ],
 
   "config": {
