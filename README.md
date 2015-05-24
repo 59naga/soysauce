@@ -1,18 +1,26 @@
 # Soysauce [![NPM version][npm-image]][npm] [![Build Status][travis-image]][travis] [![Coverage Status][coveralls-image]][coveralls]
 
-> Create SauceLabs browser matrix widget
+> Pretty sauceLabs browser matrix widget
 
 [![Sauce Test Status][sauce-image]][sauce]
 
 ## Quick usage
-__http__://soysauce.berabou.me/u/ `saucelabs_username` / `job_session_name` .svg
+
+__Can generate widgets for sessions.__
+
+__http__://soysauce.berabou.me/u/`saucelabs_username`/`session_name`.svg
+
+Example
+* http://soysauce.berabou.me/u/59798/json-ml.svg
+  ![](http://soysauce.berabou.me/u/59798/json-ml.svg)
+
+* http://soysauce.berabou.me/u/59798/object-parser.svg
+  ![](http://soysauce.berabou.me/u/59798/object-parser.svg)
+
+* http://soysauce.berabou.me/u/59798/history-json.svg
+  ![](http://soysauce.berabou.me/u/59798/history-json.svg)
 
 > Requirement allowed access at https://saucelabs.com/rest/v1/my_awesome_username/jobs
-
-e.g.:
-* http://soysauce.berabou.me/u/59798.svg
-* http://soysauce.berabou.me/u/59798/zuul-example.svg
-* http://soysauce.berabou.me/u/59798/object-parser.svg
 
 # Installation
 ```bash
