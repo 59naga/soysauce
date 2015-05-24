@@ -1,30 +1,52 @@
 {
   "name": "soysauce",
-  "main": "soysauce",
-  "bin":  "soysauce",
-  "description": "Create SauceLabs browser matrix widget",
-  "version": "0.0.5",
+  "description": "Pretty SauceLabs browser matrix widget",
+  "version": "0.1.0-alpha.0",
 
+  "bin": "soysauce",
+  "files": [
+    "soysauce",
+    "index.js",
+    "lib"
+  ],
+
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run cover"
+    }
+  },
   "scripts": {
-    "postinstall": "coffee -o lib -c src",
+    "default": "jasminetea test --verbose --timeout 5000",
+    "cover": "$(opc package scripts.default) --cover --report",
 
-    "start": "jasminetea test --file '*.coffee' --verbose --watch --recursive --timeout 6000",
-    "test": "jasminetea test --file '*.coffee' --verbose --recursive --cover --lint --report --timeout 6000"
+    "Developer commands": "",
+      "start": "$(opc package scripts.cover) --watch",
+
+    "Travis-CI commands": "",
+      "test": "npm run cover",
+
+    "Npm update via Travis-CI": "",
+      "prepublish": "if [ $TRAVIS_BUILD_PASSED ]; then npm run compile; fi",
+      
+      "compile": "coffee --bare --compile index.coffee",
+      "postcompile": "coffee --output lib --bare --compile src"
   },
   
   "dependencies": {
     "bluebird": "^2.9.25",
     "cheerio": "^0.19.0",
-    "coffee-script": "^1.9.2",
-    "commander": "^2.8.1",
+    "commander-file": "0.0.1",
     "express": "^4.12.3",
     "js-beautify": "^1.5.5",
     "request": "^2.55.0",
     "yamljs": "^0.2.2"
   },
   "devDependencies": {
-    "jasminetea": "^0.1.30-rc.3",
-    "lodash": "^3.8.0"
+    "coffee-script": "^1.9.2",
+    "ghooks": "^0.3.2",
+    "jasminetea": "^0.2.0-beta.1",
+    "lodash": "^3.8.0",
+    "object-parser-cli": "0.0.0"
   },
 
   "keywords": [

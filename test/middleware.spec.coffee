@@ -1,19 +1,18 @@
 # Dependencies
-soysauce= require '../../'
+soysauce= require '../src'
 
 express= require 'express'
 request= require 'request'
 cheerio= require 'cheerio'
 
 # Environment
-TRAVIS_JOB_ID= 62974455
-PORT= 59798
-
-domain= 'http://localhost:'+PORT+'/'
-# TODO Build Summary e.g: "10/10"
+USERNAME= 59798
+SESSIONNAME= 'object-parser'
+PORT= 8798
+DOMAIN= 'http://localhost:'+PORT+'/u/'
 
 # Specs
-describe 'Middleware: Travis log.txt parser',->
+describe 'Middleware: convert json to widget.svg',->
   server= null
   beforeAll (done)->
     app= express()
@@ -25,7 +24,7 @@ describe 'Middleware: Travis log.txt parser',->
     server.close()
 
   it 'Get widget.svg',(done)->
-    uri= domain+TRAVIS_JOB_ID+'.svg'
+    uri= DOMAIN+USERNAME+'/'+SESSIONNAME+'.svg'
     options=
       followRedirect: off
 
@@ -39,9 +38,9 @@ describe 'Middleware: Travis log.txt parser',->
       expect(response.headers['content-type']).toBe 'image/svg+xml'
       expect($('text').text()).not.toBe 'Build unknown'
       done()
-
+  
   it 'Get latest widget.svg',(done)->
-    uri= domain+'59naga/abigail.svg'
+    uri= DOMAIN+'59798/abigail.svg'
     options=
       followRedirect: off
 
@@ -56,8 +55,8 @@ describe 'Middleware: Travis log.txt parser',->
       expect($('text').text()).toBe 'Build unknown'
       done()
 
-  it 'Redirect to travis-ci.org',(done)->
-    uri= domain+'59naga/zuul-example'
+  it 'Redirect to opensauce user page',(done)->
+    uri= DOMAIN+'59798/zuul-example'
     options=
       followRedirect: off
 
@@ -66,5 +65,5 @@ describe 'Middleware: Travis log.txt parser',->
 
       expect(error).toBe null
       expect(statusCode).toBe 302
-      expect(headers.location).toBe 'https://travis-ci.org/59naga/zuul-example'
+      expect(headers.location).toBe 'https://saucelabs.com/u/59798'
       done()

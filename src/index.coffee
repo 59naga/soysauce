@@ -1,120 +1,62 @@
 # Dependencies
-Parser= require './parser'
-Middleware= require './middleware'
+Widget= require './widget'
+Matrix= require './matrix'
+middleware= require './middleware'
+pkg= require '../package'
 
-Command= (require 'commander').Command
-cli= new Command
-cliVersion= (require '../package').version
-
-Promise= require 'bluebird'
+CommandFile= (require 'commander-file').CommandFile
 
 path= require 'path'
-fs= Promise.promisifyAll(require 'fs')
+fs= require 'fs'
 
 # Public
-class Soysauce extends Parser
-  cli: (argv)->
-    cli.version cliVersion
-    cli.usage '(widget.json / log.txt) [options]'
-    cli.option '-o, --output [path]','Output to [./widget].svg'
+class Soysauce extends CommandFile
+  # CLI
+  parse: (argv)->
+    @version pkg.version
 
-    cli
-      .command 'report <username> [job_id...]'
-      .description 'Output widget.json by SauceLabs Job API'
-      .action (username,sauceJobIds)=>
-        @report username,sauceJobIds,process.env.TRAVIS_JOB_ID
-        .then (report)->
-          process.stdout.write report
-
-    cli
-      .command 'widget [log_id]'
-      .description 'Output widget.svg by Travis-CI log.txt'
-      .action =>
-        @widget arguments...
-        .then (widgetSvg)->
-          console.log widgetSvg
-
-    cli.parse argv
-
-    # Command mode
-    delay= 1000
-    delayId=
-      setTimeout =>
-        process.stdin.pause()
-
-        return cli.help() if cli.args.length is 0
-        return if 'report' in cli.rawArgs
-        return if 'widget' in cli.rawArgs
-
-        dataPath= path.resolve process.cwd(),cli.args[0]
-        try
-          raw= fs.readFileSync(dataPath).toString()
-          data= JSON.parse raw if dataPath.match /.json$/
-          data= @parse raw unless dataPath.match /.json$/
-        catch
-          data= {}
-
-        widget= @render data,datauri:yes
-        return @output(cli.output,widget) if cli.output
-        return process.stdout.write widget
-      ,delay
-
-    # Stdin mode
-    processData= ''
-    process.stdin.resume()
-    process.stdin.setEncoding 'utf8'
-    process.stdin.on 'data',(chunk)->
-      clearTimeout delayId
-
-      processData+= chunk
-    process.stdin.on 'end',=>
-      try
-        data= JSON.parse processData
+    super argv
+    .then (data)=>
+      try 
+        process.stdout.write @render JSON.parse data
+        process.exit 0
       catch
-        data= {}
+        console.error data
+        process.exit 1
 
-      widget= @render data
+  # API
+  render: (statuses,options={})->
+    columns= 0
+    rows= 0
 
-      process.stdout.write widget
-      process.exit 0
+    widget= new Widget
 
-  report: (username,sauceJobIds,travisJobId=null)->
-    promises=
-      for id in sauceJobIds
-        promise=
-          Promise.resolve id
-          .then (id)->
-            new Promise (resolve,reject)->
-              Parser::fetchBuild username,id,(error,status)->
-                resolve JSON.parse status unless error
-                reject error if error
+    builds= []
+    for name,full of Matrix::names
+      browser= new Matrix name,statuses,widget.theme.icons,widget.theme.osIcons
+      if browser.builds.length
+        rows= browser.builds.length if rows< browser.builds.length
+        builds.push browser
+    columns= builds.length
 
-    Promise.all promises
-    .then (statuses)=>
-      
-      @stringify statuses,travisJobId
+    widget.svg columns,rows
+    for browser,i in builds
+      widget.svg.append widget.h1 browser,i
+      widget.svg.append widget.ul browser,i
 
-  widget: (travisJobId)->
-    new Promise (resolve,reject)=>
-      super travisJobId,(error,raw)=>
-        return reject error if error?
+    if options.datauri
+      images= widget.document('image')
+      for image in images
+        imagePath= path.join widget.themePath,image.attribs['xlink:href']
+        imageBase64= fs.readFileSync(imagePath).toString 'base64'
+        datauri= 'data:image/png;base64,'+imageBase64
 
-        try
-          data= @parse raw,travisJobId
-        catch
-          data= {}
+        image.attribs['xlink:href']= datauri
 
-        resolve @render data
-
-  output: (fileName,file)->
-    fileName= 'widget' if fileName is yes
-    fileName+= '.svg' unless fileName.match /.svg$/
-    filePath= path.resolve process.cwd(),fileName
-
-    fs.writeFileAsync filePath,file
+    widget.html()
 
   middleware: ->
-    middleware= new Middleware arguments...
-    middleware.middleware
+    middleware this
 
-module.exports= Soysauce
+module.exports= new Soysauce
+module.exports.Soysauce= Soysauce

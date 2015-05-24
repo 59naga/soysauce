@@ -1,73 +1,93 @@
 # Dependencies
-Parser= require './parser'
-
 express= require 'express'
 request= require 'request'
 
+# Environment
+API= 'https://saucelabs.com/rest/v1/'
+VIEW= 'https://saucelabs.com/u/'
+
 # Public
-class Middleware extends Parser
-  API: 'https://api.travis-ci.org/repos/'
-  GUI: 'https://travis-ci.org/'
+middleware= (soysauce)->
+  router= express.Router()
   
-  constructor: ->
-    super
+  # API
+  router.get '/u/:user/:repo.svg',(req,res,next)->
+    req.sauce=
+      limit: req.query.limit
+      user: req.params.user
+      repo: req.params.repo
 
-    @middleware= express.Router()
-    @middleware.use (req,res,next)->
-      req.travis= {}
-      req.travis.s3= req.query.s3?
-      req.travis.cache= cacheDir if cacheDir?
+    next()
 
+  router.get '/u/:user.svg',(req,res,next)->
+    req.sauce=
+      limit: req.query.limit
+      user: req.params.user
+    
+    next()
+
+  # API -> Statuses
+  router.use (req,res,next)->
+    return next() unless req.sauce?
+
+    # ex
+    # $ curl "https://saucelabs.com/rest/v1/59798/jobs?name=object-parser&full=true&limit=50"
+
+    limit= 50
+    limit= ~~req.sauce.limit if req.sauce.limit < limit
+
+    uri= API
+    uri+= '/'+req.sauce.user
+    uri+= '/jobs?full=true&limit='+limit
+    uri+= '&name='+req.sauce.repo if req.sauce.repo?
+
+    request uri,(error,response)->
+      return res.status(500).end(error.message) if error
+      
+      req.statuses= JSON.parse response.body
       next()
 
-    @middleware.get '/:jobId.svg',(req,res,next)->
-      req.travis.jobId= req.params.jobId
-      next()
+  # Statuses -> Widget
+  router.use (req,res,next)->
+    return next() unless req.statuses?
 
-    @middleware.get '/:user/:repo.svg',(req,res,next)=>
-      slug= @getSlug req.params
+    latest= {}
+    latestId= null
+    for status in req.statuses
+      latestId?= status.build
+      break if status.build isnt latestId
 
-      uri= @API+ slug+ '/branches'
-      request uri,(error,response)->
-        return res.status(500).end(error.message) if error
+      latest[status.browser+status.browser_version]?= status
 
-        repo= JSON.parse response.body
-        req.travis.jobId= repo.branches[0]?.job_ids[0]
-        next()
+    req.widget= (status for version,status of latest)
 
-    # jobId parser
-    @middleware.use (req,res,next)=>
-      return next() unless req.travis.jobId?
+    next()
 
-      @widget req.travis.jobId, req.travis, (error,body,headers)->
-        return res.status(500).end(error.message) if error
+  # Widget -> SVG (end)
+  router.use (req,res,next)->
+    return next() unless req.widget?
 
-        req.travis.widgetId= req.travis.jobId
-        req.travis.widget= {body,headers}
-        next()
+    {widget}= req
+    lastModified= widget[0]?.start_time
+    lastModified*= 1000 if lastModified?
+    lastModified?= Date.now()
 
-    # widget parser
-    @middleware.use (req,res,next)=>
-      return next() unless req.travis.widget?
+    svg= soysauce.render widget,datauri:yes
+    res.set 'Pragma','no-cache'
+    res.set 'Cache-Control','no-cache'
+    res.set 'Content-Type','image/svg+xml'
+    res.set 'Content-Length',svg.length
+    res.set 'Last-Modified',new Date lastModified
+    res.end svg
 
-      statuses= @parse req.travis.widget.body,req.travis.widgetId
-      svg= @render statuses,datauri:yes
-      res.set 'Pragma','no-cache'
-      res.set 'Cache-Control','no-cache'
-      res.set 'Content-Type','image/svg+xml'
-      res.set 'Content-Length',svg.length
-      res.set 'Last-Modified',req.travis.widget.headers['last-modified']
-      res.end svg
+  # Otherwise
+  router.get '/u/:user',(req,res)->
+    res.redirect VIEW+req.params.user
+  router.get '/u/:user/:repo',(req,res)->
+    res.redirect VIEW+req.params.user
+  router.use (req,res)->
+    res.redirect 'https://github.com/59naga/soysauce/'
 
-    @middleware.get '/:user/:repo',(req,res)=>
-      slug= @getSlug req.params
+  router
 
-      res.redirect @GUI+ slug
-
-    @middleware.use (req,res)->
-      res.redirect 'https://github.com/59naga/soysauce/'
-
-  getSlug: ({user,repo})->
-    slug= user+'/'+repo
-
-module.exports= Middleware
+module.exports= middleware

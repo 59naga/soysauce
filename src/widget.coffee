@@ -14,8 +14,8 @@ class Widget
   svg: (@columns,@rows)->
     @document= cheerio.load '<svg/>',xmlMode:yes
 
-    @columnSize= 60
-    @rowSize= 16
+    @columnSize= 84
+    @rowSize= 25
     @padding= 5
     @width= @columnSize* @columns+ @paddingTotal(@columns,@padding)+@padding
     @height= @rowSize* @rows+ @rowSize+ @paddingTotal(@rows)
@@ -36,6 +36,8 @@ class Widget
       width: @width
       height: @height
       viewBox: "0 0 #{@width} #{@height}"
+
+    @svg.attr 'font-family','Monaco'
     @svg
 
     # [BACKGROUND-COLOR]
@@ -57,10 +59,10 @@ class Widget
 
       text= @document '<text/>'
       text.attr
-        x: 4
-        y: 11
+        x: 6
+        y: 15
         fill: '#dadada'
-        'font-size': 7
+        'font-size': 9
       text.text 'Build unknown'
       @svg.append text
   
@@ -96,9 +98,9 @@ class Widget
 
     text= @document '<text/>'
     text.attr
-      x: 18+ dx
-      y: 12+ dy
-      'font-size': 10
+      x: 28+ dx
+      y: 16+ dy
+      'font-size': 12
       fill: @theme.build.color
     text.text browser.name
     g.append text
@@ -125,8 +127,9 @@ class Widget
     dy= height+ height*j + j
 
     rect= @document '<rect/>'
-    rectFill= @theme.passed.background
-    rectFill= @theme.falling.background unless build.passed
+    rectFill= @theme.passed.background if build.passed is yes
+    rectFill= @theme.falling.background if build.passed is no
+    rectFill?= @theme.unknown.background
     rect.attr
       x: 0+ dx
       y: 0+ dy
@@ -138,15 +141,15 @@ class Widget
     text= @document '<text/>'
     text.text build.version
     text.attr
-      x:  4+ dx
-      y: 12+ dy
+      x:  8+ dx + @textAlignRight build.version,6
+      y: 16+ dy
       'font-size': 10
     g.append text
 
     image= @document '<image/>'
     image.attr
-      x: 22+ dx
-      y:  1+ dy
+      x: 27+ dx
+      y:  0+ dy
       width: height-2
       height: height-2
       'xlink:href': build.osIcon
@@ -154,12 +157,13 @@ class Widget
 
     text= @document '<text/>'
     text.text build.osVersion
-    textFill= @theme.passed.color
-    textFill= @theme.falling.color unless build.passed
+    textFill= @theme.passed.color if build.passed is yes
+    textFill= @theme.falling.color if build.passed is no
+    textFill?= @theme.unknown.color
     text.attr
-      x: 39+ dx
-      y: 10+ dy
-      'font-size': 6
+      x: 50+ dx + @textAlignRight build.osVersion,6
+      y: 15+ dy
+      'font-size': 10
       fill: textFill
     g.append text
 
@@ -169,6 +173,11 @@ class Widget
     value= 0
     value+= pixel for i in [0...length]
     value
+
+  textAlignRight: (str,em)->
+    return em if str.length is 1
+    return em if str.length is 4
+    return 0
 
   html: ->
     htmlBeautify @document.html(),indent_size:2

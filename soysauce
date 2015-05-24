@@ -1,18 +1,2 @@
 #!/usr/bin/env node
-
-var Soysauce;
-if(require('module')._extensions['.coffee']==null){
-  require('coffee-script/register');
-  Soysauce= require('./src');
-  // Soysauce= require('./lib');
-}
-else{
-  Soysauce= require('./src');
-}
-
-var soysauce;
-soysauce= new Soysauce;
-if(module.parent===null){
-  soysauce.cli(process.argv);
-}
-module.exports= soysauce;
+require('./').parse(process.argv);

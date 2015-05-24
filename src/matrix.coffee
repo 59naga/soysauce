@@ -1,7 +1,7 @@
 # No Dependencies
 
 # Public
-class Build
+class Matrix
   # Sort by 2015 Apr http://gs.statcounter.com/
   names:
     googlechrome: 'Chrome'
@@ -33,4 +33,4 @@ class Build
 
         @builds.push build
 
-module.exports= Build
+module.exports= Matrix
