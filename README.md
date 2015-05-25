@@ -17,8 +17,8 @@ Example
 * http://soysauce.berabou.me/u/59798/object-parser.svg
   ![](http://soysauce.berabou.me/u/59798/object-parser.svg)
 
-* http://soysauce.berabou.me/u/59798/history-json.svg
-  ![](http://soysauce.berabou.me/u/59798/history-json.svg)
+* http://soysauce.berabou.me/u/59798/pixel.svg
+  ![](http://soysauce.berabou.me/u/59798/pixel.svg)
 
 > Requirement allowed access at https://saucelabs.com/rest/v1/my_awesome_username/jobs
 
