@@ -119,7 +119,7 @@ class Widget
   # [Verison OSIcon OSVersion]
   li: (build,i=0,j=0)->
     summary= 'Passed' if build.passed is true
-    summary= 'Falling' if build.passed is false
+    summary= 'Failing' if build.passed is false
     summary= 'Unknown' unless build.passed?
     summary+= ' '+build.browser+build.browser_short_version
     summary+= ' '+build.os+build.osVersion
