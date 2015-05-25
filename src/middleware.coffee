@@ -57,7 +57,7 @@ middleware= (soysauce)->
       latestId?= status.build
       break if status.build isnt latestId
 
-      latest[status.browser+status.browser_version]?= status
+      latest[status.browser+status.browser_short_version]?= status
 
     req.widget= (status for version,status of latest)
 

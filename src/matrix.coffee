@@ -22,9 +22,9 @@ class Matrix
       if status.browser is @saucelabsName
         build=
           id: status.id
+          browser: @name
           version: status.browser_short_version
           passed: status.passed
-        build.getRaw= -> status
 
         [os,osVersion]= status.os.split ' '
         build.os= os.toLowerCase()
