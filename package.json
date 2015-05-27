@@ -1,7 +1,7 @@
 {
   "name": "soysauce",
   "description": "Pretty sauceLabs browser matrix widget",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.2",
 
   "bin": "soysauce",
   "files": [
@@ -13,22 +13,23 @@
 
   "config": {
     "ghooks": {
-      "pre-commit": "npm run cover"
+      "pre-commit": "npm test"
     }
   },
   "scripts": {
     "default": "jasminetea test --verbose --timeout 5000",
-    "cover": "$(opc package scripts.default) --cover --report",
+
+    "render": "coffee soysauce 'https://saucelabs.com/rest/v1/59798/jobs?name=pixel&full=true&limit=10' > rendered.svg",
 
     "Developer commands": "",
       "start": "$(opc package scripts.cover) --watch",
 
     "Travis-CI commands": "",
-      "test": "npm run cover",
+      "test": "$(opc package scripts.default) --cover --report",
 
     "Npm update via Travis-CI": "",
-      "prepublish": "if [ $TRAVIS_BUILD_PASSED ]; then npm run compile; fi",
-      
+      "prepublish": "node -e \"if(process.env.TRAVIS){}else{process.exit(1)}\" && npm run compile || echo skip prepublish",
+
       "compile": "coffee --bare --compile index.coffee",
       "postcompile": "coffee --output lib --bare --compile src"
   },

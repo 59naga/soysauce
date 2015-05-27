@@ -19,7 +19,6 @@ deploy:
 # process.env setting
 before_deploy:
   - npm install coffee-script --global
-  - export TRAVIS_BUILD_PASSED=true
 env:
   global:
     # COVERALLS_REPO_TOKEN

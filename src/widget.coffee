@@ -146,7 +146,7 @@ class Widget
     g.append rect
 
     text= @document '<text/>'
-    text.text build.version
+    text.text build.version.replace /^beta$/,'β'
     text.attr
       x:  8+ dx + @textAlignRight build.version,6
       y: 16+ dy
