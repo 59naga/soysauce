@@ -12,12 +12,15 @@ __http__://soysauce.berabou.me/u/`saucelabs_username`/`session_name`.svg
 
 Example
 * http://soysauce.berabou.me/u/59798/json-ml.svg
+  
   ![](http://soysauce.berabou.me/u/59798/json-ml.svg)
 
 * http://soysauce.berabou.me/u/59798/object-parser.svg
+  
   ![](http://soysauce.berabou.me/u/59798/object-parser.svg)
 
 * http://soysauce.berabou.me/u/59798/pixel.svg
+  
   ![](http://soysauce.berabou.me/u/59798/pixel.svg)
 
 > Requirement allowed access at https://saucelabs.com/rest/v1/my_awesome_username/jobs
