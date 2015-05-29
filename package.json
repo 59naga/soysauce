@@ -1,7 +1,7 @@
 {
   "name": "soysauce",
   "description": "Pretty sauceLabs browser matrix widget",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
 
   "bin": "soysauce",
   "files": [
@@ -40,6 +40,7 @@
     "commander-file": "0.0.1",
     "express": "^4.12.3",
     "js-beautify": "^1.5.5",
+    "lodash": "^3.9.3",
     "request": "^2.55.0",
     "yamljs": "^0.2.2"
   },
@@ -47,7 +48,6 @@
     "coffee-script": "^1.9.2",
     "ghooks": "^0.3.2",
     "jasminetea": "^0.2.0-beta.1",
-    "lodash": "^3.8.0",
     "object-parser-cli": "0.0.0"
   },
 

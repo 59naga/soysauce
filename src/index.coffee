@@ -17,8 +17,23 @@ class Soysauce extends CommandFile
 
     super argv
     .then (data)=>
+      try
+        statuses= JSON.parse data
+      catch e
+        statuses= []
+
+      latest= {}
+      latestId= null
+      for status in statuses
+        latestId?= status.build
+        break if status.build isnt latestId
+
+        latest[status.browser+status.browser_short_version]?= status
+
+      widget= (status for version,status of latest)
+
       try 
-        process.stdout.write @render JSON.parse data
+        process.stdout.write @render widget
         process.exit 0
       catch
         console.error data

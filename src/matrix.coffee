@@ -1,4 +1,5 @@
-# No Dependencies
+# Dependencies
+_= require 'lodash'
 
 # Public
 class Matrix
@@ -32,5 +33,7 @@ class Matrix
         build.osIcon= osIcons?[build.os]
 
         @builds.push build
+
+    @builds= _.sortBy @builds,(build)-> return -(parseFloat build.version)
 
 module.exports= Matrix
