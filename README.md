@@ -13,15 +13,15 @@ __http__://soysauce.berabou.me/u/`saucelabs_username`/`session_name`.svg
 Example
 * http://soysauce.berabou.me/u/59798/json-ml.svg
   
-  ![](http://soysauce.berabou.me/u/59798/json-ml.svg)
+  ![](http://soysauce.berabou.me/u/59798/json-ml.svg?branch=master)
 
 * http://soysauce.berabou.me/u/59798/object-parser.svg
   
-  ![](http://soysauce.berabou.me/u/59798/object-parser.svg)
+  ![](http://soysauce.berabou.me/u/59798/object-parser.svg?branch=master)
 
 * http://soysauce.berabou.me/u/59798/pixel.svg
   
-  ![](http://soysauce.berabou.me/u/59798/pixel.svg)
+  ![](http://soysauce.berabou.me/u/59798/pixel.svg?branch=master)
 
 > Requirement allowed access at https://saucelabs.com/rest/v1/my_awesome_username/jobs
 
@@ -55,7 +55,7 @@ License
 
 [License]: http://59naga.mit-license.org/
 
-[sauce-image]: http://soysauce.berabou.me/u/59798/zuul-example.svg
+[sauce-image]: http://soysauce.berabou.me/u/59798/zuul-example.svg?branch=master
 [sauce]: https://saucelabs.com/u/59798
 [npm-image]:https://img.shields.io/npm/v/soysauce.svg?style=flat-square
 [npm]: https://npmjs.org/package/soysauce
