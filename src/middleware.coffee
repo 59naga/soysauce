@@ -77,7 +77,8 @@ middleware= (soysauce)->
     res.set 'Cache-Control','no-cache'
     res.set 'Content-Type','image/svg+xml'
     res.set 'Content-Length',svg.length
-    res.set 'Last-Modified',new Date lastModified
+    res.set 'Last-Modified',(new Date lastModified).toUTCString()
+    res.set 'Expires',(new Date lastModified).toUTCString()
     res.end svg
 
   # Otherwise
