@@ -9,6 +9,10 @@ CommandFile= (require 'commander-file').CommandFile
 path= require 'path'
 fs= require 'fs'
 
+mkdirp= require 'mkdirp'
+cacheDir= path.resolve __dirname,'..','widgets'
+_= require 'lodash'
+
 # Public
 class Soysauce extends CommandFile
   # CLI
@@ -69,6 +73,21 @@ class Soysauce extends CommandFile
         image.attribs['xlink:href']= datauri
 
     widget.html()
+
+  readCache: (slug,time)->
+    widgetPath= path.join cacheDir,_.kebabCase(slug)+'.json'
+
+    try
+      cache= JSON.parse fs.readFileSync widgetPath,'utf8'
+      cache.svg if time <= cache.time
+    catch
+      null
+
+  writeCache: (slug,time,svg)->
+    widgetPath= path.join cacheDir,_.kebabCase(slug)+'.json'
+
+    mkdirp.sync cacheDir
+    fs.writeFileSync widgetPath,JSON.stringify {time,svg}
 
   middleware: ->
     middleware this

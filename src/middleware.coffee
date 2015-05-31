@@ -72,13 +72,20 @@ middleware= (soysauce)->
     lastModified*= 1000 if lastModified?
     lastModified?= Date.now()
 
-    svg= soysauce.render widget,datauri:yes
+    slug= req.sauce.user
+    slug+= '/'+req.sauce.repo if req.sauce.repo?
+
+    svg= soysauce.readCache slug,lastModified
+    unless svg?
+      svg= soysauce.render widget,datauri:yes
+      soysauce.writeCache slug,lastModified,svg
+
     res.set 'Pragma','no-cache'
     res.set 'Cache-Control','no-cache'
     res.set 'Content-Type','image/svg+xml'
     res.set 'Content-Length',svg.length
     res.set 'Last-Modified',(new Date lastModified).toUTCString()
-    res.set 'Expires',(new Date lastModified).toUTCString()
+    res.set 'Expires',(new Date 0).toUTCString()
     res.end svg
 
   # Otherwise

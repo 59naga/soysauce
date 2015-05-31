@@ -36,6 +36,7 @@ describe 'Middleware: convert json to widget.svg',->
       expect(response.headers['pragma']).toBe 'no-cache'
       expect(response.headers['cache-control']).toBe 'no-cache'
       expect(response.headers['content-type']).toBe 'image/svg+xml'
+      expect(response.headers['expires']).toBe 'Thu, 01 Jan 1970 00:00:00 GMT'
       expect($('text').text()).not.toBe 'Build unknown'
       done()
   
@@ -52,6 +53,7 @@ describe 'Middleware: convert json to widget.svg',->
       expect(response.headers['pragma']).toBe 'no-cache'
       expect(response.headers['cache-control']).toBe 'no-cache'
       expect(response.headers['content-type']).toBe 'image/svg+xml'
+      expect(response.headers['expires']).toBe 'Thu, 01 Jan 1970 00:00:00 GMT'
       expect($('text').text()).toBe 'Build unknown'
       done()
 

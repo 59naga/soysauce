@@ -1,7 +1,7 @@
 {
   "name": "soysauce",
   "description": "Pretty sauceLabs browser matrix widget",
-  "version": "0.1.0-beta.7",
+  "version": "0.1.0-beta.8",
 
   "bin": "soysauce",
   "files": [
@@ -22,7 +22,7 @@
     "render": "coffee soysauce 'https://saucelabs.com/rest/v1/59798/jobs?name=pixel&full=true&limit=10' > rendered.svg",
 
     "Developer commands": "",
-      "start": "$(opc package scripts.cover) --watch",
+      "start": "$(opc package scripts.default) --watch",
 
     "Travis-CI commands": "",
       "test": "$(opc package scripts.default) --cover --report",
@@ -41,6 +41,7 @@
     "express": "^4.12.3",
     "js-beautify": "^1.5.5",
     "lodash": "^3.9.3",
+    "mkdirp": "^0.5.1",
     "request": "^2.55.0",
     "yamljs": "^0.2.2"
   },
@@ -48,7 +49,7 @@
     "coffee-script": "^1.9.2",
     "ghooks": "^0.3.2",
     "jasminetea": "^0.2.0-beta.1",
-    "object-parser-cli": "0.0.0"
+    "object-parser-cli": "0.0.1-alpha.0"
   },
 
   "keywords": [
