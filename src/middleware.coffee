@@ -68,7 +68,7 @@ middleware= (soysauce)->
     return next() unless req.widget?
 
     {widget}= req
-    lastModified= widget[0]?.start_time
+    lastModified= widget[widget.length-1]?.start_time
     lastModified*= 1000 if lastModified?
     lastModified?= Date.now()
 
