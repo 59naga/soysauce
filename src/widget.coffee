@@ -121,7 +121,7 @@ class Widget
     summary= 'Passed' if build.passed is true
     summary= 'Failing' if build.passed is false
     summary= 'Unknown' unless build.passed?
-    summary+= ' '+build.browser+build.browser_short_version
+    summary+= ' '+build.browser+build.version
     summary+= ' '+build.os+build.osVersion
 
     g= @document '<g/>'

@@ -1,6 +1,7 @@
 # Dependencies
 express= require 'express'
 request= require 'request'
+_= require 'lodash'
 
 # Environment
 API= 'https://saucelabs.com/rest/v1/'
@@ -68,7 +69,8 @@ middleware= (soysauce)->
     return next() unless req.widget?
 
     {widget}= req
-    lastModified= widget[widget.length-1]?.start_time
+
+    lastModified= _.max _.pluck widget,'end_time'
     lastModified*= 1000 if lastModified?
     lastModified?= Date.now()
 

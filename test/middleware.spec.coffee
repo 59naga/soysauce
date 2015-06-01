@@ -1,9 +1,14 @@
+# TODO
+# * check the lastModified
+
 # Dependencies
 soysauce= require '../src'
 
 express= require 'express'
 request= require 'request'
 cheerio= require 'cheerio'
+
+exec= (require 'child_process').exec
 
 # Environment
 USERNAME= 59798
@@ -20,8 +25,10 @@ describe 'Middleware: convert json to widget.svg',->
     
     server= app.listen PORT,->
       done()
-  afterAll ->
+  afterAll (done)->
     server.close()
+
+    exec 'rm -rf '+process.cwd()+'/widgets',done
 
   it 'Get widget.svg',(done)->
     uri= DOMAIN+USERNAME+'/'+SESSIONNAME+'.svg'
