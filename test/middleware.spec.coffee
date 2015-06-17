@@ -1,6 +1,3 @@
-# TODO
-# * check the lastModified
-
 # Dependencies
 soysauce= require '../src'
 
@@ -14,7 +11,7 @@ exec= (require 'child_process').exec
 USERNAME= 59798
 SESSIONNAME= 'object-parser'
 PORT= 8798
-DOMAIN= 'http://localhost:'+PORT+'/u/'
+DOMAIN= 'http://localhost:'+PORT+'/'
 
 # Specs
 describe 'Middleware: convert json to widget.svg',->

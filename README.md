@@ -4,50 +4,57 @@
 
 [![Sauce Test Status][sauce-image]][sauce]
 
-## Quick usage
+# API
 
-__Can generate widgets for sessions.__
+* __http__://soysauce.berabou.me/u/`saucelabs_username`.svg
+* __http__://soysauce.berabou.me/u/`saucelabs_username`/`session_name`.svg
 
-__http__://soysauce.berabou.me/u/`saucelabs_username`/`session_name`.svg
+> Can be render if available `https://saucelabs.com/rest/v1/saucelabs_username/jobs`
 
-Example
-* http://soysauce.berabou.me/u/59798/json-ml.svg
-  
-  ![](http://soysauce.berabou.me/u/59798/json-ml.svg?branch=master)
+## Provide widgets at your [Express4](http://expressjs.com/4x/api.html)
 
-* http://soysauce.berabou.me/u/59798/object-parser.svg
-  
-  ![](http://soysauce.berabou.me/u/59798/object-parser.svg?branch=master)
+```bash
+$ npm install express soysauce
+$ node app.js
+# Server running at http://localhost:59798/
+```
 
-* http://soysauce.berabou.me/u/59798/pixel.svg
-  
-  ![](http://soysauce.berabou.me/u/59798/pixel.svg?branch=master)
+`app.js`
 
-> Requirement allowed access at https://saucelabs.com/rest/v1/my_awesome_username/jobs
+```js
+// Dependencies
+var express= require('express');
+var soysauce= require('soysauce');
 
-# Installation
+// Setup express
+var app= express();
+app.use(soysauce.middleware());
+app.listen(59798,function(){
+  console.log('Server running at http://localhost:59798/');
+});
+```
+
+Can be render at:
+* http://localhost:59798/`saucelabs_username`.svg
+* http://localhost:59798/`saucelabs_username`/`session_name`.svg
+
+# CLI
+
+## `soysauce url > widget.svg`
+
+Render a &lt;svg&gt; to stdout If url is [jobs.json](https://docs.saucelabs.com/reference/rest-api/#jobs).
+
 ```bash
 $ npm install soysauce --global
-$ soysauce -V
-# 0.1.0
+$ soysauce "https://saucelabs.com/rest/v1/59798/jobs?name=object-parser&full=true&limit=50" > widget.svg
 ```
 
-## Use SauceLabs REST API
-```bash
-$ soysauce "https://saucelabs.com/rest/v1/my_awesome_username/jobs?name=job_session_name&full=true&limit=50"
-# <svg version="1.1" ...>
-#   <rect x="0" y="0" width="460" height="16" fill="#232D34" />
-#   <g class="h1 iphone">...</g>
-#   <g class="ul">
-#     <g class="li mac">...</g>
-#   </g>
-# </svg>
-```
+# Relevant project
+* [zuul](https://github.com/defunctzombie/zuul)
+> multi-framework javascript browser testing
 
-> https://docs.saucelabs.com/reference/rest-api/#full-jobs
-
-## Force reload cache of `camo.githubusercontent.com`
-See: [Why do my images have strange URLs? - User Documentation](https://help.github.com/articles/why-do-my-images-have-strange-urls/)
+* [karma-saucelabs-launcher](https://github.com/59naga/karma-saucelabs-launcher)
+> Launch any browser on SauceLabs at concurrency.
 
 License
 ---
@@ -55,7 +62,7 @@ License
 
 [License]: http://59naga.mit-license.org/
 
-[sauce-image]: http://soysauce.berabou.me/u/59798/zuul-example.svg?branch=master
+[sauce-image]: http://soysauce.berabou.me/u/59798/pixel-png.svg?branch=master
 [sauce]: https://saucelabs.com/u/59798
 [npm-image]:https://img.shields.io/npm/v/soysauce.svg?style=flat-square
 [npm]: https://npmjs.org/package/soysauce

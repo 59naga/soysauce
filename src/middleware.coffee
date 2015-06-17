@@ -3,6 +3,8 @@ express= require 'express'
 request= require 'request'
 _= require 'lodash'
 
+path= require 'path'
+
 # Environment
 API= 'https://saucelabs.com/rest/v1/'
 VIEW= 'https://saucelabs.com/u/'
@@ -10,9 +12,9 @@ VIEW= 'https://saucelabs.com/u/'
 # Public
 middleware= (soysauce)->
   router= express.Router()
-  
+
   # API
-  router.get '/u/:user/:repo.svg',(req,res,next)->
+  router.get '/:user/:repo.svg',(req,res,next)->
     req.sauce=
       limit: req.query.limit
       user: req.params.user
@@ -20,7 +22,7 @@ middleware= (soysauce)->
 
     next()
 
-  router.get '/u/:user.svg',(req,res,next)->
+  router.get '/:user.svg',(req,res,next)->
     req.sauce=
       limit: req.query.limit
       user: req.params.user
@@ -77,9 +79,11 @@ middleware= (soysauce)->
     slug= req.sauce.user
     slug+= '/'+req.sauce.repo if req.sauce.repo?
 
+    base= req.protocol+'://'+req.get('host')+(path.dirname req.originalUrl)
+
     svg= soysauce.readCache slug,lastModified
     unless svg?
-      svg= soysauce.render widget,datauri:yes
+      svg= soysauce.render widget,{base}
       soysauce.writeCache slug,lastModified,svg
 
     res.set 'Pragma','no-cache'
@@ -90,13 +94,15 @@ middleware= (soysauce)->
     res.set 'Expires',(new Date 0).toUTCString()
     res.end svg
 
+  # Expose theme icons
+  router.use express.static soysauce.widget.themePath
+  router.use '/:user/',express.static soysauce.widget.themePath
+  
   # Otherwise
-  router.get '/u/:user',(req,res)->
+  router.get '/:user',(req,res)->
     res.redirect VIEW+req.params.user
-  router.get '/u/:user/:repo',(req,res)->
+  router.get '/:user/:repo',(req,res)->
     res.redirect VIEW+req.params.user
-  router.use (req,res)->
-    res.redirect 'https://github.com/59naga/soysauce/'
 
   router
 

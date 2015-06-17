@@ -7,11 +7,12 @@ path= require 'path'
 
 # Public
 class Widget
-  constructor: (@themePath)->
-    @themePath?= path.resolve __dirname,'..','themes','default'
+  themePath: path.resolve __dirname,'..','themes','default'
+  constructor: (themePath)->
+    @themePath= themePath if themePath?
     @theme= YAML.load path.join @themePath,'theme.yaml'
 
-  svg: (@columns,@rows)->
+  init: (@columns,@rows)->
     @document= cheerio.load '<svg/>',xmlMode:yes
 
     @columnSize= 84
