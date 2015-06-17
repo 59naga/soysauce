@@ -28,7 +28,7 @@ var soysauce= require('soysauce');
 
 // Setup express
 var app= express();
-app.use(soysauce.middleware());
+app.use(soysauce.middleware({datauri:true}));
 app.listen(59798,function(){
   console.log('Server running at http://localhost:59798/');
 });
@@ -37,6 +37,35 @@ app.listen(59798,function(){
 Can be render at:
 * http://localhost:59798/`saucelabs_username`.svg
 * http://localhost:59798/`saucelabs_username`/`session_name`.svg
+
+## Middleware options
+
+### `datauri`: default `true`
+
+Replace the url of image to datauri for avoid [Mixed Content](https://developer.mozilla.org/en-US/docs/Security/MixedContent).
+
+```js
+// Not use datauri
+app.use(soysauce.middleware());
+app.listen(59798,function(){
+  // ...
+  // <image x="7" y="2" width="21" height="21" xlink:href="http://localhost:59798/59798/chrome_64x64.png" />
+  // ...
+});
+
+// Use datauri
+app.use(soysauce.middleware({datauri:true}));
+app.listen(59799,function(){
+  // ...
+  // <image x="7" y="2" width="21" height="21" xlink:href=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAYjElEQVR4Ab2ZC5RdZZXnf/v7zn3XK6lUVV6VFyQQDRAgRGzAICDEKGLDIALSPhGlm/Ex3a09ziBjtw8UQdT2bfsYHEQcp0UcBGlQgmLkTSBASEJC3lVJveu+zvm+PeW996zcOmtCKoD+19q1v3uqslb+//3fe..." />
+  // ...
+});
+```
+
+### `cache`: default `true`
+
+Cache the rendered svg.
+Update the cache if the jobs have been added.
 
 # CLI
 

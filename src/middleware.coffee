@@ -10,8 +10,12 @@ API= 'https://saucelabs.com/rest/v1/'
 VIEW= 'https://saucelabs.com/u/'
 
 # Public
-middleware= (soysauce)->
+middleware= (soysauce,options={})->
   router= express.Router()
+
+  # Default options
+  options.datauri?= yes
+  options.cache?= yes
 
   # API
   router.get '/:user/:repo.svg',(req,res,next)->
@@ -79,12 +83,13 @@ middleware= (soysauce)->
     slug= req.sauce.user
     slug+= '/'+req.sauce.repo if req.sauce.repo?
 
-    base= req.protocol+'://'+req.get('host')+(path.dirname req.originalUrl)
+    unless options.datauri
+      options.base= req.protocol+'://'+req.get('host')+(path.dirname req.originalUrl)
 
-    svg= soysauce.readCache slug,lastModified
+    svg= soysauce.readCache slug,lastModified if options.cache
     unless svg?
-      svg= soysauce.render widget,{base}
-      soysauce.writeCache slug,lastModified,svg
+      svg= soysauce.render widget,options
+      soysauce.writeCache slug,lastModified,svg if options.cache
 
     res.set 'Pragma','no-cache'
     res.set 'Cache-Control','no-cache'

@@ -10,7 +10,7 @@ path= require 'path'
 fs= require 'fs'
 
 mkdirp= require 'mkdirp'
-cacheDir= path.resolve __dirname,'..','widgets'
+cacheDir= path.resolve __dirname,'..','cache'
 _= require 'lodash'
 
 # Public
@@ -76,6 +76,8 @@ class Soysauce extends CommandFile
     if options.datauri
       images= @widget.document('image')
       for image in images
+        continue if image.attribs['xlink:href'].indexOf('#') is 0
+
         imagePath= path.join @widget.themePath,image.attribs['xlink:href']
         imageBase64= fs.readFileSync(imagePath).toString 'base64'
         datauri= 'data:image/png;base64,'+imageBase64
@@ -101,8 +103,8 @@ class Soysauce extends CommandFile
     mkdirp.sync cacheDir
     fs.writeFileSync widgetPath,JSON.stringify {time,svg}
 
-  middleware: ->
-    middleware this
+  middleware: (options={})->
+    middleware this,options
 
 module.exports= new Soysauce
 module.exports.Soysauce= Soysauce

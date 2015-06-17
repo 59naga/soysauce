@@ -25,7 +25,7 @@ describe 'Middleware: convert json to widget.svg',->
   afterAll (done)->
     server.close()
 
-    exec 'rm -rf '+process.cwd()+'/widgets',done
+    exec 'rm -rf '+process.cwd()+'/cache',done
 
   it 'Get widget.svg',(done)->
     uri= DOMAIN+USERNAME+'/'+SESSIONNAME+'.svg'

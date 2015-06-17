@@ -2,6 +2,7 @@
 cheerio= require 'cheerio'
 htmlBeautify= (require 'js-beautify').html
 YAML= require 'yamljs'
+_= require 'lodash'
 
 path= require 'path'
 
@@ -39,7 +40,9 @@ class Widget
       viewBox: "0 0 #{@width} #{@height}"
 
     @svg.attr 'font-family','Monaco'
-    @svg
+
+    @svg.append '<defs id="icons"/>'
+    @icons= {}# defined id collection
 
     # [BACKGROUND-COLOR]
     rect= @document '<rect/>'
@@ -88,13 +91,13 @@ class Widget
       fill: 'transparent'
     g.append rect
 
-    image= @document '<image/>'
+    image= @document '<use/>'
     image.attr
       x: 2+ dx
       y: 2+ dy
-      width: height- 2*2
-      height: height- 2*2
-      'xlink:href': browser.icon
+      'xlink:href': @addIcon browser.icon,
+        width: height- 2*2
+        height: height- 2*2
     g.append image
 
     text= @document '<text/>'
@@ -154,13 +157,13 @@ class Widget
       'font-size': 10
     g.append text
 
-    image= @document '<image/>'
+    image= @document '<use/>'
     image.attr
       x: 27+ dx
       y:  0+ dy
-      width: height-2
-      height: height-2
-      'xlink:href': build.osIcon
+      'xlink:href': @addIcon build.osIcon,
+        width: height-2
+        height: height-2
     g.append image
 
     text= @document '<text/>'
@@ -186,6 +189,18 @@ class Widget
     return em if str.length is 1
     return em if str.length is 4
     return 0
+
+  addIcon: (imagePath,attr={})->
+    id= _.snakeCase path.basename imagePath
+
+    unless @icons[id]?
+      image= @document '<image/>'
+      image.attr 'id',id
+      image.attr attr
+      image.attr 'xlink:href', imagePath
+      @document('defs').append image
+
+    '#'+id
 
   html: ->
     htmlBeautify @document.html(),indent_size:2
