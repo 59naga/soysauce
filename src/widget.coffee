@@ -148,11 +148,13 @@ class Widget
       height: height
       fill: rectFill
     g.append rect
+    
+    version= build.version.replace /^beta$/,'β'
 
     text= @document '<text/>'
-    text.text build.version.replace /^beta$/,'β'
+    text.text version
     text.attr
-      x:  8+ dx + @textAlignRight build.version,6
+      x:  8+ dx + @textAlignRight version,6
       y: 16+ dy
       'font-size': 10
     g.append text
@@ -166,13 +168,16 @@ class Widget
         height: height-2
     g.append image
 
+    osVersion= build.osVersion
+    osVersion= 'EDGE' if build.os is 'windows' and osVersion is '10'
+
     text= @document '<text/>'
-    text.text build.osVersion
+    text.text osVersion
     textFill= @theme.passed.color if build.passed is yes
     textFill= @theme.falling.color if build.passed is no
     textFill?= @theme.unknown.color
     text.attr
-      x: 50+ dx + @textAlignRight build.osVersion,6
+      x: 50+ dx + @textAlignRight osVersion,6
       y: 15+ dy
       'font-size': 10
       fill: textFill
