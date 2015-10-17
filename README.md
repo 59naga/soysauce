@@ -91,7 +91,7 @@ License
 
 [License]: http://59naga.mit-license.org/
 
-[sauce-image]: http://soysauce.berabou.me/u/59798/pixel-png.svg?branch=master
+[sauce-image]: http://soysauce.berabou.me/u/59798/nicovideo.svg?branch=master
 [sauce]: https://saucelabs.com/u/59798
 [npm-image]:https://img.shields.io/npm/v/soysauce.svg?style=flat-square
 [npm]: https://npmjs.org/package/soysauce
