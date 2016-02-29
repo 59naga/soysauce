@@ -6,8 +6,8 @@
 
 # API
 
-* __http__://soysauce.berabou.me/u/`saucelabs_username`.svg
-* __http__://soysauce.berabou.me/u/`saucelabs_username`/`session_name`.svg
+* [soysauce.berabou.me/u/`saucelabs_username`.svg](https://soysauce.berabou.me/u/59798.svg)
+* [soysauce.berabou.me/u/`saucelabs_username`/`session_name`.svg](https://soysauce.berabou.me/u/59798/carrack.svg)
 
 > Can be render if available `https://saucelabs.com/rest/v1/saucelabs_username/jobs`
 
